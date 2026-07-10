@@ -1,8 +1,44 @@
 'use client';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight, Clock, ShieldCheck, Headphones } from 'lucide-react';
 
 export default function DemoSection() {
+  const [form, setForm] = React.useState({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+  const [status, setStatus] = React.useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = React.useState('');
+  const [plan, setPlan] = React.useState('');
+
+  // Capture the plan of interest if the visitor arrived from a pricing CTA (?plan=Lite).
+  React.useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get('plan');
+    if (p) setPlan(p);
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, plan }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setStatus('success');
+        setForm({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+      } else {
+        setStatus('error');
+        setErrorMsg(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('error');
+      setErrorMsg('Network error. Please try again.');
+    }
+  }
+
   const benefits = [
     "Personalized 30-minute walkthrough",
     "Tailored for your business scale",
@@ -16,7 +52,7 @@ export default function DemoSection() {
   };
 
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
+    <section id="contact" className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         
         {/* Left: Animated Text & Trust Factors */}
@@ -58,21 +94,32 @@ export default function DemoSection() {
           whileHover={{ y: -5 }}
           className="bg-card border border-border p-8 md:p-10 rounded-3xl shadow-xl"
         >
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
-              <motion.input variants={fieldVariants} whileHover="hover" type="text" placeholder="First Name" className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
-              <motion.input variants={fieldVariants} whileHover="hover" type="text" placeholder="Last Name" className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
+              <motion.input variants={fieldVariants} whileHover="hover" type="text" required placeholder="First Name" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
+              <motion.input variants={fieldVariants} whileHover="hover" type="text" required placeholder="Last Name" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
             </div>
-            <motion.input variants={fieldVariants} whileHover="hover" type="email" placeholder="Work Email" className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
-            <motion.textarea variants={fieldVariants} whileHover="hover" placeholder="Tell us about your business..." className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all h-32" />
-            
-            <motion.button 
+            <motion.input variants={fieldVariants} whileHover="hover" type="email" required placeholder="Work Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
+            <motion.input variants={fieldVariants} whileHover="hover" type="tel" required placeholder="Phone Number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all" />
+            <motion.textarea variants={fieldVariants} whileHover="hover" required placeholder="Tell us about your business..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full p-4 rounded-xl border-2 border-border bg-background/50 outline-none transition-all h-32" />
+
+            <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground p-4 rounded-xl font-bold hover:bg-primary/90 transition-all cursor-pointer"
+              disabled={status === 'sending'}
+              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground p-4 rounded-xl font-bold hover:bg-primary/90 transition-all cursor-pointer disabled:opacity-60"
             >
-              Request Private Demo <ArrowRight className="size-5" />
+              {status === 'sending' ? 'Sending…' : 'Request Private Demo'} <ArrowRight className="size-5" />
             </motion.button>
+
+            {status === 'success' && (
+              <p className="text-sm font-semibold text-emerald-600 text-center">
+                Thanks! Your request has been sent — we&apos;ll be in touch shortly.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="text-sm font-semibold text-red-600 text-center">{errorMsg}</p>
+            )}
             <p className="text-xs text-foreground/40 text-center">
               Book a session directly with our founder. 100% confidential.
             </p>

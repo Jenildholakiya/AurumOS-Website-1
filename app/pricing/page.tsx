@@ -1,12 +1,12 @@
 'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Check, X, ArrowRight, Zap, ShieldCheck,
   Building2, Cpu, BarChart3, Users,
   MessageSquare, History, Database
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import GemCanvas from "@/components/three/GemCanvas";
 
 // Animation Variants
@@ -23,45 +23,94 @@ const stagger = {
 };
 
 export default function PricingPage() {
-  const [isAnnual, setIsAnnual] = useState(true);
-
   const plans = [
     {
-      name: "Retail Solo",
-      price: isAnnual ? "4,999" : "5,999",
-      desc: "For independent showrooms requiring precise POS and HUID compliance.",
-      features: ["Single Showroom POS", "HUID Auto-Mapping", "Real-time Metal Rates", "GST Invoice Engine", "Standard Analytics"],
-      notIncluded: ["Wholesale Portal", "Multi-branch Sync", "IoT Scale Support"],
-      cta: "Start Retail Solo",
+      name: "Lite",
+      price: "15,000",
+      annual: "3,000",
+      desc: "For single-shop jewelers who need solid local billing, stock, and security.",
+      features: [
+        "Single-PC local mode only",
+        "Billing & retail billing",
+        "Basic weight stock entry + stock ledger",
+        "Basic product master + categories",
+        "Basic client ledger / outstanding",
+        "Owner + 1 staff login, lockout",
+        "Local tag printing (basic printer)",
+        "Scale weighing",
+        "Basic sales report",
+        "Core Bastion security (DB watchdog + lock screen)"
+      ],
+      notIncluded: [
+        "Multi-PC LAN network mode",
+        "Full accounts & statements",
+        "Cloud sync engine",
+      ],
+      cta: "Start with Lite",
       highlight: false
     },
     {
-      name: "Enterprise Command",
-      price: isAnnual ? "12,499" : "14,999",
-      desc: "The standard for multi-branch chains and high-volume wholesalers.",
-      features: ["Unlimited Branches", "Wholesale Command Center", "Branch-to-Branch Transfers", "B2B Trade Portal", "Priority 24/7 Support", "Margin Protection Tools"],
-      notIncluded: ["Custom Hardware Dev"],
-      cta: "Scale with Enterprise",
+      name: "Pro",
+      price: "35,000",
+      annual: "7,000",
+      desc: "For multi-PC shops needing full accounts, analytics, and advanced security.",
+      features: [
+        "Everything in Lite, plus:",
+        "Multi-PC LAN network mode (brain server/client, discovery, handshake)",
+        "Karigar / Katti vouchers + Uchak stock/inward",
+        "Touch groups / touch ledger / touch-stock report",
+        "Full accounts: journal, credit ledger, statements, customer purchases",
+        "Tag audit (book vs scanned reconciliation)",
+        "Stock Med, stagnant + low-stock reports",
+        "TSC network printing",
+        "Multiple staff + sessions",
+        "Full analytics dashboard + reporting",
+        "Year close + archive",
+        "Enhanced Bastion (session guard, auto-healer, pattern learner, email alerts, forensic PDF)"
+      ],
+      notIncluded: [
+        "Cloud sync engine",
+        "Fleet Bastion intelligence",
+        "API / integration access"
+      ],
+      cta: "Go Pro",
       highlight: true
     },
     {
-      name: "Custom Ecosystem",
-      price: "Custom",
-      desc: "Tailored infrastructure for large-scale manufacturers and refiners.",
-      features: ["IoT Scale Integration", "On-Premise Deployment", "Custom API Access", "Dedicated CTO Manager", "Annual Calibration Audit", "White-label Portal"],
+      name: "Enterprise",
+      price: "75,000",
+      annual: "15,000",
+      desc: "For multi-location chains needing cloud sync, fleet intelligence, and priority SLA.",
+      features: [
+        "Everything in Pro, plus:",
+        "Cloud sync engine (cross-shop sync, conflict resolution)",
+        "Fleet Bastion intelligence (global signatures via bastion_sync/Supabase)",
+        "Customer accounts + loyalty",
+        "Advanced Bastion AI (cloud-brain behavioral detection)",
+        "Remote admin / Nexus node management + live telemetry stream",
+        "Bridge server (multi-location link)",
+        "Custom DB location + audit logs",
+        "Priority support / SLA",
+        "API / integration access"
+      ],
       notIncluded: [],
-      cta: "Talk to Strategic Sales",
+      cta: "Talk to Sales",
       highlight: false
     }
   ];
 
   const comparison = [
-    { feature: "Multi-Location Sync", solo: false, enterprise: true, custom: true },
-    { feature: "HUID Automation", solo: true, enterprise: true, custom: true },
-    { feature: "Live LBMA Gold Rates", solo: true, enterprise: true, custom: true },
-    { feature: "Wholesale Order Management", solo: false, enterprise: true, custom: true },
-    { feature: "Custom Hardware API", solo: false, enterprise: false, custom: true },
-    { feature: "Temporal Ledger (Time Travel)", solo: "Basic", enterprise: "Full", custom: "Full" },
+    { feature: "Local Billing & Retail", lite: true, pro: true, enterprise: true },
+    { feature: "Multi-PC LAN Network", lite: false, pro: true, enterprise: true },
+    { feature: "Karigar / Katti Vouchers", lite: false, pro: true, enterprise: true },
+    { feature: "Full Accounts & Statements", lite: false, pro: true, enterprise: true },
+    { feature: "Tag Audit Reconciliation", lite: false, pro: true, enterprise: true },
+    { feature: "Analytics Dashboard", lite: "Basic", pro: "Full", enterprise: "Full" },
+    { feature: "Cloud Sync Engine", lite: false, pro: false, enterprise: true },
+    { feature: "Fleet Bastion Intelligence", lite: false, pro: false, enterprise: true },
+    { feature: "Customer Loyalty", lite: false, pro: false, enterprise: true },
+    { feature: "API / Integration Access", lite: false, pro: false, enterprise: true },
+    { feature: "Priority Support / SLA", lite: false, pro: false, enterprise: true },
   ];
 
   return (
@@ -78,24 +127,10 @@ export default function PricingPage() {
         <motion.h1 {...fadeInUp} className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
           Investment in <br /><span className="text-primary italic">Absolute Integrity.</span>
         </motion.h1>
-        
-        <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="flex items-center justify-center gap-6 mt-12">
-          <span className={`text-sm font-bold ${!isAnnual ? 'text-primary' : 'text-foreground/40'}`}>Monthly</span>
-          <button 
-            onClick={() => setIsAnnual(!isAnnual)}
-            aria-label="Toggle between monthly and annual billing"
-            aria-pressed={isAnnual}
-            className="w-16 h-9 rounded-full bg-primary/10 relative p-1.5 transition-all border border-primary/20"
-          >
-            <motion.div 
-              animate={{ x: isAnnual ? 28 : 0 }}
-              className="size-6 bg-primary rounded-full shadow-xl shadow-primary/40"
-            />
-          </button>
-          <span className={`text-sm font-bold ${isAnnual ? 'text-primary' : 'text-foreground/40'}`}>
-            Annual <span className="text-[10px] bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-1 rounded-md ml-2">Save 20%</span>
-          </span>
-        </motion.div>
+
+        <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-foreground/60 text-lg max-w-xl mx-auto">
+          One-time license fee, billed with an annual maintenance plan. Upgrade anytime as your operation grows.
+        </motion.p>
       </section>
 
       {/* 2. PRICING CARDS */}
@@ -118,7 +153,10 @@ export default function PricingPage() {
 
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold">₹{plan.price}</span>
-                {plan.price !== "Custom" && <span className="text-foreground/40 text-sm">/month</span>}
+                <span className="text-foreground/40 text-sm">one-time</span>
+              </div>
+              <div className="text-foreground/50 text-sm">
+                + ₹{plan.annual}/yr maintenance
               </div>
 
               <p className="text-foreground/60 text-sm leading-relaxed">{plan.desc}</p>
@@ -139,8 +177,10 @@ export default function PricingPage() {
               </ul>
             </div>
 
-            <Button className={`w-full mt-12 rounded-2xl py-7 font-bold text-lg group ${plan.highlight ? 'bg-primary' : 'bg-secondary'}`}>
-              {plan.cta} <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+            <Button asChild className={`w-full mt-12 rounded-2xl py-7 font-bold text-lg group ${plan.highlight ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-transparent border border-primary text-primary hover:bg-primary hover:text-primary-foreground'}`}>
+              <Link href={`/#contact?plan=${encodeURIComponent(plan.name)}`}>
+                {plan.cta} <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </motion.div>
         ))}
@@ -153,19 +193,19 @@ export default function PricingPage() {
           <div className="rounded-[40px] border border-border bg-background overflow-hidden shadow-xl">
              <div className="grid grid-cols-4 p-8 border-b border-border bg-card/50 text-xs font-bold uppercase tracking-widest text-foreground/40">
                 <div className="col-span-1">Feature</div>
-                <div className="text-center">Solo</div>
+                <div className="text-center">Lite</div>
+                <div className="text-center">Pro</div>
                 <div className="text-center">Enterprise</div>
-                <div className="text-center">Custom</div>
              </div>
              {comparison.map((row, i) => (
-               <motion.div 
+               <motion.div
                 key={i} {...fadeInUp}
                 className="grid grid-cols-4 p-8 border-b border-border last:border-0 hover:bg-primary/5 transition-colors"
                >
                  <div className="font-bold text-sm">{row.feature}</div>
-                 <div className="flex justify-center">{typeof row.solo === 'boolean' ? (row.solo ? <Check className="text-primary" size={20}/> : <X className="text-foreground/10" size={20}/>) : <span className="text-xs font-bold">{row.solo}</span>}</div>
+                 <div className="flex justify-center">{typeof row.lite === 'boolean' ? (row.lite ? <Check className="text-primary" size={20}/> : <X className="text-foreground/10" size={20}/>) : <span className="text-xs font-bold">{row.lite}</span>}</div>
+                 <div className="flex justify-center">{typeof row.pro === 'boolean' ? (row.pro ? <Check className="text-primary" size={20}/> : <X className="text-foreground/10" size={20}/>) : <span className="text-xs font-bold">{row.pro}</span>}</div>
                  <div className="flex justify-center">{typeof row.enterprise === 'boolean' ? (row.enterprise ? <Check className="text-primary" size={20}/> : <X className="text-foreground/10" size={20}/>) : <span className="text-xs font-bold">{row.enterprise}</span>}</div>
-                 <div className="flex justify-center">{typeof row.custom === 'boolean' ? (row.custom ? <Check className="text-primary" size={20}/> : <X className="text-foreground/10" size={20}/>) : <span className="text-xs font-bold">{row.custom}</span>}</div>
                </motion.div>
              ))}
           </div>
