@@ -52,10 +52,8 @@ export default function SecurityBanner() {
           </div>
         </div>
 
-        {/* Animated Background Glow */}
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
+        {/* Static Background Glow (no animation -> zero per-frame cost) */}
+        <div
           className="absolute -bottom-20 -right-20 size-80 bg-primary/20 rounded-full blur-[100px]"
         />
       </motion.div>

@@ -25,14 +25,54 @@ function EnvLighting() {
 
 function Gem() {
   const group = useRef<THREE.Group>(null);
+  const dragging = useRef(false);
+  const last = useRef({ x: 0, y: 0 });
+  const { gl, invalidate } = useThree();
 
+  // Pointer-drag rotation. Works in "demand" mode because we call invalidate()
+  // after mutating the rotation, so the canvas only renders on actual input.
+  useEffect(() => {
+    const el = gl.domElement;
+    const onDown = (e: PointerEvent) => {
+      dragging.current = true;
+      last.current = { x: e.clientX, y: e.clientY };
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!dragging.current || !group.current) return;
+      const dx = e.clientX - last.current.x;
+      const dy = e.clientY - last.current.y;
+      last.current = { x: e.clientX, y: e.clientY };
+      group.current.rotation.y += dx * 0.01;
+      group.current.rotation.x = THREE.MathUtils.clamp(
+        group.current.rotation.x + dy * 0.01,
+        -1.2,
+        1.2,
+      );
+      invalidate();
+    };
+    const onUp = () => {
+      dragging.current = false;
+    };
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, [gl, invalidate]);
+
+  // Auto-rotate — only executes while the render loop is active ('always'),
+  // i.e. while hovered / briefly after entering view. Idle => no frames.
   useFrame((state, delta) => {
     const g = group.current;
     if (!g) return;
-    const t = state.clock.elapsedTime;
-    g.rotation.y += delta * 0.35;
-    g.rotation.x = Math.sin(t * 0.3) * 0.15;
-    g.position.y = Math.sin(t * 0.8) * 0.06;
+    if (!dragging.current) {
+      g.rotation.y += delta * 0.35;
+      g.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.15;
+    }
+    g.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.05;
   });
 
   return (
@@ -68,9 +108,10 @@ export default function GemScene({ frameloop = 'demand', className }: GemScenePr
     <Canvas
       className={className}
       frameloop={frameloop}
-      dpr={[1, 1.5]}
+      dpr={[1, 1.25]}
       camera={{ position: [0, 0, 4.2], fov: 42 }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      style={{ touchAction: 'pan-y' }}
     >
       <EnvLighting />
       <ambientLight intensity={0.5} />

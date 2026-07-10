@@ -41,6 +41,7 @@ type GemCanvasProps = {
 export default function GemCanvas({ className = '', height = 360 }: GemCanvasProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -54,12 +55,19 @@ export default function GemCanvas({ className = '', height = 360 }: GemCanvasPro
     return () => observer.disconnect();
   }, []);
 
-  // Animate only while visible AND motion is allowed. Otherwise render one
-  // static frame (demand) — zero continuous main-thread cost.
-  const frameloop = inView && !reduced ? 'always' : 'demand';
+  // Continuous rendering ONLY while the pointer is over the gem (intentional
+  // interaction). Otherwise the loop is "demand" -> zero per-frame cost while
+  // idle or scrolling, so the page stays perfectly smooth.
+  const frameloop = inView && !reduced && hovered ? 'always' : 'demand';
 
   return (
-    <div ref={wrapRef} className={`relative ${className}`} style={{ height }}>
+    <div
+      ref={wrapRef}
+      className={`relative ${className}`}
+      style={{ height }}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+    >
       <GemPoster />
       {inView && <GemScene frameloop={frameloop} className="!absolute inset-0" />}
     </div>

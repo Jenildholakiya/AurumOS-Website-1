@@ -1,13 +1,24 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GemCanvas from '@/components/three/GemCanvas';
 
 /** Home-page centerpiece that pairs copy with the interactive 3D gem. */
 export default function GemShowcase() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const yGem = useSpring(useTransform(scrollYProgress, [0, 1], [60, -60]), {
+    stiffness: 80,
+    damping: 20,
+  });
+
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section ref={ref} className="relative py-24 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <motion.span
@@ -34,7 +45,7 @@ export default function GemShowcase() {
             transition={{ delay: 0.2 }}
             className="text-lg text-foreground/70 leading-relaxed max-w-lg"
           >
-            Every facet of AurumOS is calibrated like a cut stone — balanced, reflective, and built to last. Scroll the core into view to watch it turn.
+            Every facet of AurumOS is calibrated like a cut stone — balanced, reflective, and built to last. Hover the core to watch it turn, or drag to inspect it from any angle.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -51,7 +62,9 @@ export default function GemShowcase() {
           </motion.div>
         </div>
 
-        <GemCanvas className="mx-auto w-full max-w-md" height={420} />
+        <motion.div style={{ y: yGem }}>
+          <GemCanvas className="mx-auto w-full max-w-md" height={420} />
+        </motion.div>
       </div>
     </section>
   );

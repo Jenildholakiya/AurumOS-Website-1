@@ -10,7 +10,10 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 20);
+    const next = latest > 20;
+    // Only re-render when the threshold is actually crossed (avoids a React
+    // re-render on every scroll pixel -> smoother scrolling).
+    setIsScrolled((prev) => (prev !== next ? next : prev));
   });
 
   // Mapping links to actual routes
