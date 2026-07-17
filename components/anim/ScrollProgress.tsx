@@ -1,16 +1,29 @@
 'use client';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import { gsap, useGSAP } from '@/components/anim/gsap/register';
 
-/** Thin rose-gold progress bar pinned to the top of the viewport. */
+/** Rose-gold scroll-progress bar pinned to the top, scrubbed by GSAP ScrollTrigger. */
 export default function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+  const ref = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.fromTo(
+      ref.current,
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        ease: 'none',
+        scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
+      },
+    );
+  });
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       aria-hidden
-      style={{ scaleX }}
-      className="fixed top-0 left-0 right-0 h-0.5 bg-primary origin-left z-[60]"
+      className="fixed left-0 right-0 top-0 z-[60] h-0.5 origin-left bg-primary"
+      style={{ transform: 'scaleX(0)' }}
     />
   );
 }

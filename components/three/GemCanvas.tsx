@@ -2,36 +2,15 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
+// NOTE: useReducedMotion is kept from framer-motion purely to detect the
+// user's preference; all animation itself is driven by GSAP / three.js.
 
 // three.js + r3f are loaded ONLY when this canvas scrolls into view, keeping
 // them out of the initial bundle (critical for Lighthouse Performance).
 const GemScene = dynamic(() => import('./GemScene'), {
   ssr: false,
-  loading: () => <GemPoster />,
+  loading: () => null,
 });
-
-/** CSS-only rose-gold gem used as the instant LCP visual and 3D fallback. */
-function GemPoster() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
-      <div
-        className="relative size-40 md:size-56 rounded-full"
-        style={{
-          background: 'radial-gradient(circle at 35% 30%, #F6DDD5 0%, #C77B6B 55%, #8E4E44 100%)',
-          boxShadow: '0 24px 70px -12px rgba(199,123,107,0.55)',
-        }}
-      >
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              'conic-gradient(from 210deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.45) 90deg, rgba(255,255,255,0) 200deg)',
-          }}
-        />
-      </div>
-    </div>
-  );
-}
 
 type GemCanvasProps = {
   className?: string;
@@ -41,7 +20,6 @@ type GemCanvasProps = {
 export default function GemCanvas({ className = '', height = 360 }: GemCanvasProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -55,20 +33,13 @@ export default function GemCanvas({ className = '', height = 360 }: GemCanvasPro
     return () => observer.disconnect();
   }, []);
 
-  // Continuous rendering ONLY while the pointer is over the gem (intentional
-  // interaction). Otherwise the loop is "demand" -> zero per-frame cost while
-  // idle or scrolling, so the page stays perfectly smooth.
-  const frameloop = inView && !reduced && hovered ? 'always' : 'demand';
+  // Auto-rotate whenever the gem is on screen (no hover required). The render
+  // loop only runs while in view, so it costs nothing once scrolled away.
+  // Reduced-motion users get a single static frame instead of continuous spin.
+  const frameloop = inView && !reduced ? 'always' : 'demand';
 
   return (
-    <div
-      ref={wrapRef}
-      className={`relative ${className}`}
-      style={{ height }}
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
-    >
-      <GemPoster />
+    <div ref={wrapRef} className={`relative ${className}`} style={{ height }}>
       {inView && <GemScene frameloop={frameloop} className="!absolute inset-0" />}
     </div>
   );

@@ -1,230 +1,277 @@
 'use client';
-import { motion } from 'framer-motion';
-import {
-  BarChart3, ShieldCheck, Warehouse, Zap, Users, ReceiptText,
-  Lock, Fingerprint, History, Cpu, Globe, ArrowRight, Check
-} from 'lucide-react';
-import Image from 'next/image';
-import GemCanvas from "@/components/three/GemCanvas";
-
-// Animation Variants
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, ease: "easeOut" as const }
-};
-
-const staggerContainer = {
-  initial: {},
-  whileInView: { transition: { staggerChildren: 0.1 } }
-};
+import { useRef } from 'react';
+import Link from 'next/link';
+import { ArrowRight, Check, Lock, Fingerprint, History, Cpu, Globe, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import SplitHeading from '@/components/anim/SplitHeading';
+import Reveal from '@/components/anim/Reveal';
+import TiltCard from '@/components/anim/TiltCard';
+import GemCanvas from '@/components/three/GemCanvas';
+import { gsap, SplitText, useGSAP } from '@/components/anim/gsap/register';
 
 const features = [
-  { title: "Wholesale Command", desc: "Master multi-location inventory with automated replenishment.", advantage: "Reduces 'dead stock' by 40%.", icon: Warehouse },
-  { title: "Retail Point-of-Sale", desc: "High-speed billing interface for high-traffic showrooms.", advantage: "Instant HUID verification.", icon: Zap },
-  { title: "HUID Compliance", desc: "Automated hallmarking logs & regulatory audit trails.", advantage: "100% Audit-ready documentation.", icon: ShieldCheck },
-  { title: "Executive Analytics", desc: "Interactive dashboards for revenue and weight tracking.", advantage: "Real-time metal margin visibility.", icon: BarChart3 },
-  { title: "Smart Ledger", desc: "A relationship-first engine for credit & loyalty.", advantage: "Automated gold-savings tracking.", icon: ReceiptText },
-  { title: "Staff Management", desc: "Granular workforce oversight & performance tracking.", advantage: "KPI-driven sales incentives.", icon: Users },
+  { title: 'Wholesale Command', desc: 'Master multi-location inventory with automated replenishment and B2B fulfilment synced across every branch.', advantage: 'Reduces dead stock by 40%.', icon: Globe },
+  { title: 'Retail Point-of-Sale', desc: 'A high-speed billing surface built for high-traffic showrooms — instant tax, digital receipts, zero queue friction.', advantage: 'Instant HUID verification.', icon: Zap },
+  { title: 'HUID Compliance', desc: 'Automated hallmarking logs and regulatory audit trails woven directly into the workflow.', advantage: '100% audit-ready documentation.', icon: Lock },
+  { title: 'Executive Analytics', desc: 'Interactive dashboards for revenue, weight drift, and your highest-margin lines at a single glance.', advantage: 'Real-time metal margin visibility.', icon: Globe },
+  { title: 'Smart Ledger', desc: 'A relationship-first engine for customer credit, gold-savings schemes, and loyalty history.', advantage: 'Automated gold-savings tracking.', icon: History },
+  { title: 'Staff Management', desc: 'Granular workforce oversight, attendance, and performance tracking in one secure hub.', advantage: 'KPI-driven sales incentives.', icon: Fingerprint },
+];
+
+const stats = [
+  { label: 'System Uptime', val: '99.99%', color: 'text-emerald-500' },
+  { label: 'HUIDs Verified', val: '1.2M+', color: 'text-primary' },
+  { label: 'Data Integrity', val: '100%', color: 'text-primary' },
+  { label: 'Support', val: '24/7', color: 'text-primary' },
+];
+
+const ecosystem = [
+  { title: 'IoT Scale Integration', desc: 'Direct RS232/USB weight capture to eliminate manual-entry fraud and rounding errors.', icon: Cpu },
+  { title: 'Global Cloud Architecture', desc: 'Sub-100ms latency across multi-continent showroom synchronization.', icon: Globe },
 ];
 
 export default function FeaturesPage() {
+  const hero = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const scope = hero.current!;
+      const title = scope.querySelector('[data-feat-title]') as HTMLElement;
+      const split = new SplitText(title, { type: 'words', mask: 'words', autoSplit: true });
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from(split.words, { yPercent: 120, opacity: 0, duration: 0.9, stagger: 0.08 })
+        .from('[data-feat-eyebrow]', { y: 18, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-feat-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, '-=0.6')
+        .from('[data-feat-visual]', { y: 50, autoAlpha: 0, scale: 0.94, duration: 1, ease: 'power2.out' }, '-=0.9');
+
+      return () => split.revert();
+    },
+    { scope: hero },
+  );
+
   return (
     <main className="min-h-screen text-foreground overflow-x-hidden">
-      
-      {/* 1. HERO SECTION: Animated Reveal */}
-      <section className="relative pt-40 pb-24 px-6 text-center overflow-hidden">
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 size-[600px] bg-primary/20 rounded-full blur-[120px] -z-10" 
+
+      {/* 1. HERO */}
+      <section ref={hero} className="relative px-6 pt-40 pb-16 text-center overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute top-0 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-primary/20 blur-[120px] -z-10"
         />
-        
-        <motion.span 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="px-4 py-1.5 rounded-full border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest bg-primary/5"
+
+        <span
+          data-feat-eyebrow
+          className="inline-block rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary"
         >
           Version 1.0.0 Now Live
-        </motion.span>
-        
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="text-5xl md:text-8xl font-bold tracking-tight mt-8 mb-6"
+        </span>
+
+        <h1
+          data-feat-title
+          className="mx-auto mt-8 mb-6 max-w-4xl text-5xl font-bold tracking-tight md:text-8xl"
         >
-          The Operating System <br /> for <span className="text-primary italic">Excellence.</span>
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
-          className="text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed"
+          The Operating System <br /> for <span className="italic text-primary">Excellence.</span>
+        </h1>
+
+        <p
+          data-feat-sub
+          className="mx-auto max-w-2xl text-xl leading-relaxed text-foreground/80"
         >
-          AurumOS unifies every facet of your jewellery enterprise—from raw gold weigh-ins to retail hallmarking—into a single, high-fidelity command center.
-        </motion.p>
+          AurumOS unifies every facet of your jewellery enterprise — from raw gold
+          weigh-ins to retail hallmarking — into a single, high-fidelity command center.
+        </p>
+
+        <div data-feat-visual className="mx-auto mt-16 w-full max-w-md">
+          <GemCanvas className="mx-auto w-full max-w-md" height={360} />
+        </div>
       </section>
 
-      {/* 1B. INTERACTIVE 3D CORE */}
-      <section className="pb-16 px-6 max-w-3xl mx-auto">
-        <GemCanvas className="mx-auto w-full max-w-md" height={360} />
-      </section>
-
-      {/* 2. LIVE METRICS TICKER */}
-      <section className="py-12 border-y border-border bg-card/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            { label: "System Uptime", val: "99.99%", color: "text-emerald-500" },
-            { label: "HUIDs Verified", val: "1.2M+", color: "text-primary" },
-            { label: "Data Integrity", val: "100%", color: "text-primary" },
-            { label: "Support", val: "24/7", color: "text-primary" },
-          ].map((stat, i) => (
-            <motion.div key={i} {...fadeInUp} transition={{ delay: i * 0.1 }} className="text-center space-y-1">
+      {/* 2. LIVE METRICS */}
+      <section className="border-y border-border bg-card/50 py-12 backdrop-blur-sm">
+        <Reveal
+          as="div"
+          stagger={0.1}
+          y={20}
+          className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 md:grid-cols-4"
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="space-y-1 text-center">
               <div className="text-xs font-bold uppercase tracking-tighter text-foreground/40">{stat.label}</div>
               <div className={`text-3xl font-bold ${stat.color}`}>{stat.val}</div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. CORE PILLARS: Bento Grid */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-xl space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Built for Scale. <br />Calibrated for Precision.</h2>
-            <p className="text-foreground/60">Every module is engineered to eliminate the friction of manual administration.</p>
-          </div>
-          <button className="text-primary font-bold flex items-center gap-2 hover:gap-4 transition-all">
-            Explore Documentation <ArrowRight size={20} />
-          </button>
-        </div>
-
-        <motion.div 
-          variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {features.map((feature, i) => (
-            <motion.div 
-              key={i} variants={fadeInUp} whileHover={{ y: -10 }}
-              className="group p-8 rounded-3xl border bg-card hover:border-primary/40 transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="mb-6 inline-block p-4 rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
-                  <feature.icon size={32} />
-                </div>
-                <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-foreground/60 leading-relaxed mb-8">{feature.desc}</p>
-              </div>
-              <div className="flex items-center gap-2 text-sm font-bold text-primary">
-                <Check size={16} /> {feature.advantage}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* 4. HARDWARE ECOSYSTEM: The Technical Edge */}
-      <section className="py-32 px-6 bg-primary/5">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-          <motion.div {...fadeInUp} className="space-y-8">
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">The Hardware <br />Ecosystem.</h2>
-            <p className="text-lg text-foreground/70 leading-relaxed">
-              AurumOS doesn't just sit in the cloud. It breathes with your showroom. We provide native integration with industrial electronic scales, barcode scanners, and thermal tag printers.
-            </p>
-            
-            <div className="space-y-6">
-              {[
-                { title: "IoT Scale Integration", desc: "Direct RS232/USB weight capturing to prevent manual entry fraud.", icon: Cpu },
-                { title: "Global Cloud Architecture", desc: "Sub-100ms latency across multi-continent showroom sync.", icon: Globe },
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6">
-                  <div className="size-12 rounded-xl bg-background flex items-center justify-center shrink-0 border border-border">
-                    <item.icon className="text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xl">{item.title}</h4>
-                    <p className="text-foreground/50">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
             </div>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}
-            className="relative aspect-square bg-gradient-to-br from-primary/20 to-transparent rounded-full border border-primary/10 flex items-center justify-center p-12"
-          >
-             <motion.div 
-               animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-               className="absolute inset-0 border-2 border-dashed border-primary/20 rounded-full" 
-             />
-             <div className="relative size-full bg-background rounded-full border border-border flex items-center justify-center shadow-2xl">
-                <Warehouse size={80} className="text-primary/20 absolute opacity-20" />
-                <Fingerprint size={120} className="text-primary animate-pulse" />
-             </div>
-          </motion.div>
+          ))}
+        </Reveal>
+      </section>
+
+      {/* 3. CORE PILLARS */}
+      <section id="pillars" className="mx-auto max-w-7xl px-6 py-32">
+        <div className="mb-16 flex max-w-xl flex-col gap-4">
+          <SplitHeading
+            as="h2"
+            text="Built for Scale. Calibrated for Precision."
+            className="text-4xl font-bold tracking-tight md:text-5xl"
+          />
+          <Reveal as="p" y={20} className="text-foreground/60">
+            Every module is engineered to eliminate the friction of manual administration.
+          </Reveal>
+        </div>
+
+        <Reveal as="div" stagger={0.12} y={50} className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <TiltCard key={feature.title} tilt={7} className="rounded-3xl">
+                <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border/60 bg-white/70 p-8 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-2xl hover:shadow-primary/10">
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-x-12 -top-16 h-40 -rotate-12 bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-0 transition-all duration-700 ease-out group-hover:translate-x-40 group-hover:opacity-100"
+                  />
+                  <div>
+                    <div className="relative mb-6 inline-flex rounded-2xl bg-primary/10 p-3 text-primary transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="relative mb-3 text-xl font-bold">{feature.title}</h3>
+                    <p className="relative leading-relaxed text-foreground/70">{feature.desc}</p>
+                  </div>
+                  <div className="relative mt-8 flex items-center gap-2 text-sm font-bold text-primary">
+                    <Check className="size-4" /> {feature.advantage}
+                  </div>
+                </div>
+              </TiltCard>
+            );
+          })}
+        </Reveal>
+      </section>
+
+      {/* 4. HARDWARE ECOSYSTEM */}
+      <section id="ecosystem" className="bg-primary/5 px-6 py-32">
+        <div className="mx-auto grid max-w-7xl items-center gap-20 lg:grid-cols-2">
+          <Reveal as="div" y={40} className="space-y-8">
+            <SplitHeading
+              as="h2"
+              text="The Hardware Ecosystem."
+              className="text-4xl font-bold tracking-tight md:text-6xl"
+            />
+            <p className="text-lg leading-relaxed text-foreground/70">
+              AurumOS doesn&apos;t just sit in the cloud. It breathes with your showroom —
+              natively integrating industrial electronic scales, barcode scanners, and
+              thermal tag printers.
+            </p>
+
+            <div className="space-y-6">
+              {ecosystem.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="flex gap-6">
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-border bg-background">
+                      <Icon className="size-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold">{item.title}</h4>
+                      <p className="text-foreground/50">{item.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+
+          <Reveal y={50} className="flex justify-center">
+            <div className="relative aspect-square w-full max-w-md rounded-full border border-primary/10 bg-gradient-to-br from-primary/20 to-transparent p-12">
+              <div
+                aria-hidden
+                className="absolute inset-0 animate-spin rounded-full border-2 border-dashed border-primary/20"
+                style={{ animationDuration: '20s' }}
+              />
+              <div className="relative flex size-full items-center justify-center rounded-full border border-border bg-background shadow-2xl">
+                <Globe className="absolute size-20 text-primary/20 opacity-20" />
+                <Fingerprint className="size-28 animate-pulse text-primary" />
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* 5. DATA SOVEREIGNTY: High-Trust Banner */}
-      <section className="py-24 px-6">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
-          className="max-w-7xl mx-auto bg-foreground text-background rounded-[40px] p-12 md:p-24 overflow-hidden relative"
+      {/* 5. DATA SOVEREIGNTY */}
+      <section className="px-6 py-24">
+        <Reveal
+          y={50}
+          className="relative mx-auto max-w-7xl overflow-hidden rounded-[40px] bg-foreground p-12 text-background md:p-24"
         >
-          <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+          <div className="relative z-10 grid items-center gap-16 lg:grid-cols-2">
             <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Your Data. <br />Your Sovereignty.</h2>
-              <p className="text-background/60 text-lg">
-                In the jewellery trade, privacy is as valuable as the inventory. AurumOS utilizes a Zero-Knowledge architecture, ensuring only you hold the keys to your financial legacy.
+              <SplitHeading
+                as="h2"
+                text="Your Data. Your Sovereignty."
+                className="text-4xl font-bold tracking-tighter text-background md:text-6xl"
+              />
+              <p className="text-lg text-background/60">
+                In the jewellery trade, privacy is as valuable as the inventory. AurumOS uses a
+                Zero-Knowledge architecture — only you hold the keys to your financial legacy.
               </p>
               <div className="flex flex-wrap gap-4">
-                <div className="px-6 py-3 rounded-full border border-background/20 flex items-center gap-2">
-                  <Lock size={18} className="text-primary" /> Bank-Grade Encryption
+                <div className="flex items-center gap-2 rounded-full border border-background/20 px-6 py-3">
+                  <Lock className="size-[18px] text-primary" /> Bank-Grade Encryption
                 </div>
-                <div className="px-6 py-3 rounded-full border border-background/20 flex items-center gap-2">
-                  <Fingerprint size={18} className="text-primary" /> Multi-Factor RBAC
+                <div className="flex items-center gap-2 rounded-full border border-background/20 px-6 py-3">
+                  <Fingerprint className="size-[18px] text-primary" /> Multi-Factor RBAC
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-6">
-               <div className="p-8 rounded-3xl bg-background/5 border border-background/10 backdrop-blur-md">
-                 <History className="text-primary mb-4" />
-                 <h4 className="font-bold text-xl mb-2">Immutable Audit Logs</h4>
-                 <p className="text-background/50 text-sm">Every weight adjustment, every sale, and every system login is timestamped in an unalterable digital ledger.</p>
-               </div>
+              <div className="rounded-3xl border border-background/10 bg-background/5 p-8 backdrop-blur-md">
+                <History className="mb-4 text-primary" />
+                <h4 className="mb-2 text-xl font-bold">Immutable Audit Logs</h4>
+                <p className="text-sm text-background/50">
+                  Every weight adjustment, sale, and login is timestamped into an unalterable
+                  digital ledger.
+                </p>
+              </div>
             </div>
           </div>
-          <div className="absolute top-0 right-0 size-96 bg-primary/20 blur-[120px] rounded-full" />
-        </motion.div>
+          <div aria-hidden className="absolute top-0 right-0 size-96 rounded-full bg-primary/20 blur-[120px]" />
+        </Reveal>
       </section>
 
-      {/* 6. THE FOUNDER'S PLEDGE */}
-      <section className="py-32 px-6 max-w-4xl mx-auto text-center">
-        <motion.div {...fadeInUp}>
-          <p className="text-2xl md:text-3xl font-medium leading-relaxed italic text-foreground/80">
-            "We aren't building a software company. We are building a trust ecosystem. AurumOS is my personal commitment to ensuring the jewellery trade operates with the absolute digital integrity it deserves."
+      {/* 6. FOUNDER'S PLEDGE */}
+      <section className="mx-auto max-w-4xl px-6 py-32 text-center">
+        <Reveal as="div" y={30}>
+          <p className="text-2xl font-medium leading-relaxed italic text-foreground/80 md:text-3xl">
+            &ldquo;We aren&apos;t building a software company. We are building a trust ecosystem.
+            AurumOS is my personal commitment to ensuring the jewellery trade operates with the
+            absolute digital integrity it deserves.&rdquo;
           </p>
           <div className="mt-12">
-            <div className="font-['Dancing_Script',_cursive] text-5xl text-primary mb-2">Jenil Dholakiya</div>
-            <div className="text-xs uppercase tracking-[0.3em] font-bold text-foreground/40">Strategic Founder & CTO</div>
+            <div className="mb-2 font-['Dancing_Script',_cursive] text-5xl text-primary">Jenil Dholakiya</div>
+            <div className="text-xs font-bold uppercase tracking-[0.3em] text-foreground/40">Strategic Founder &amp; CTO</div>
           </div>
-        </motion.div>
+        </Reveal>
       </section>
 
       {/* 7. FINAL CONVERSION HUB */}
-      <section className="py-32 px-6 border-t border-border">
-         <div className="max-w-3xl mx-auto text-center space-y-12">
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight">Calibrate your <br />Business today.</h2>
-            <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <button className="px-10 py-5 rounded-2xl bg-primary text-primary-foreground font-bold text-lg hover:scale-105 transition-all shadow-xl shadow-primary/20">
-                Request Private Demo
-              </button>
-              <button className="px-10 py-5 rounded-2xl border border-border font-bold text-lg hover:bg-card transition-all">
-                View Pricing
-              </button>
-            </div>
-            <p className="text-foreground/40 text-sm italic">Join 120+ High-Performance Showrooms already using AurumOS.</p>
-         </div>
+      <section className="border-t border-border px-6 py-32">
+        <div className="mx-auto max-w-3xl space-y-12 text-center">
+          <SplitHeading
+            as="h2"
+            text="Calibrate your Business today."
+            className="text-5xl font-bold tracking-tight md:text-7xl"
+          />
+          <Reveal as="div" y={20} className="flex flex-col justify-center gap-4 md:flex-row">
+            <Button asChild size="lg" className="h-12 rounded-2xl px-8 text-lg shadow-xl shadow-primary/20">
+              <Link href="/#contact">
+                Request Private Demo <ArrowRight className="ml-2 size-5" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-12 rounded-2xl px-8 text-lg">
+              <Link href="/pricing">View Pricing</Link>
+            </Button>
+          </Reveal>
+          <p className="text-sm italic text-foreground/40">
+            Join 120+ high-performance showrooms already using AurumOS.
+          </p>
+        </div>
       </section>
 
     </main>

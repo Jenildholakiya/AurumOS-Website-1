@@ -1,26 +1,60 @@
 'use client';
-import { motion, type HTMLMotionProps } from 'framer-motion';
+import { useRef } from 'react';
+import { gsap, useGSAP } from '@/components/anim/gsap/register';
 
-type RevealProps = HTMLMotionProps<'div'> & {
-  delay?: number;
+type RevealProps = {
+  children: React.ReactNode;
+  as?: 'div' | 'section' | 'ul' | 'li' | 'article' | 'header' | 'p';
+  className?: string;
+  /** Vertical travel distance in px. */
   y?: number;
+  delay?: number;
+  duration?: number;
+  start?: string;
+  /** When > 0, the element's direct children are revealed in a staggered sequence. */
+  stagger?: number;
 };
 
 /**
- * Scroll-triggered entrance. Respects prefers-reduced-motion globally via
- * MotionConfig in MotionProvider, so no animation runs for those users.
+ * Scroll-triggered entrance built on GSAP ScrollTrigger. Runs inside a layout
+ * effect (useGSAP) so the "from" state is applied before first paint — no flash.
+ * Set `stagger` to cascade direct children (e.g. a grid of cards).
  */
-export default function Reveal({ children, delay = 0, y = 24, className, ...rest }: RevealProps) {
+export default function Reveal({
+  children,
+  as = 'div',
+  className = '',
+  y = 40,
+  delay = 0,
+  duration = 0.9,
+  start = 'top 85%',
+  stagger = 0,
+}: RevealProps) {
+  const ref = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) return;
+      const targets = stagger > 0 ? Array.from(el.children) : el;
+      gsap.from(targets, {
+        y,
+        autoAlpha: 0,
+        duration,
+        ease: 'power3.out',
+        delay,
+        stagger,
+        scrollTrigger: { trigger: el, start, once: true },
+      });
+    },
+    { scope: ref },
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Tag = as as any;
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98], delay }}
-      {...rest}
-    >
+    <Tag ref={ref} className={className}>
       {children}
-    </motion.div>
+    </Tag>
   );
 }
