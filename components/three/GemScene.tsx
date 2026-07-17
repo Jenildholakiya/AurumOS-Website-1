@@ -108,7 +108,7 @@ function DiamondRing({ scrollRef }: { scrollRef?: GemScrollRef }) {
   const idleAngle = useRef(0);
   const boost = useRef(0);
 
-  const diamondGeo = useMemo(() => buildBrilliantCut(8, 1), []);
+  const diamondGeo = useMemo(() => buildBrilliantCut(16, 1), []);
   useEffect(() => () => diamondGeo.dispose(), [diamondGeo]);
 
   // Pointer-drag rotation. Works in "demand" mode because we call invalidate()
@@ -208,52 +208,72 @@ function DiamondRing({ scrollRef }: { scrollRef?: GemScrollRef }) {
         {/* Scroll-linked / idle rotation wrapper — posed each frame from the
             shared scroll store. Drag rotation lives on the parent `group`. */}
         <group ref={scrollGroup}>
-        {/* Centering offset so the ring+stone spins around its visual centroid */}
-        <group position={[0, -0.15, 0]} scale={0.9}>
-          {/* Polished gold band */}
-          <mesh castShadow receiveShadow>
-            <torusGeometry args={[1, 0.16, 48, 120]} />
-            {goldMat}
-          </mesh>
-
-          {/* The brilliant-cut stone, seated on top of the band */}
-          <group position={[0, 1.18, 0]} scale={0.6}>
-            {/* Delicate gold collet hugging the girdle */}
-            <mesh castShadow>
-              <torusGeometry args={[0.62, 0.035, 16, 64]} />
-              <meshStandardMaterial color={GOLD_DARK} metalness={1} roughness={0.25} />
+          {/* Tilt the ring back so the band reads as a 3-D ring (not a flat
+              lifebuoy); scrolling stands it upright. Spin is about the band's
+              centre. */}
+          <group position={[0, -0.25, 0]} scale={0.95} rotation={[-0.5, 0, 0]}>
+            {/* Polished, even gold shank */}
+            <mesh castShadow receiveShadow>
+              <torusGeometry args={[1, 0.12, 64, 160]} />
+              {goldMat}
             </mesh>
 
-            {/* Four prong claws connecting the stone to the band */}
-            {prongAngles.map((a, i) => (
-              <mesh key={i} position={[Math.cos(a) * 0.92, -0.28, Math.sin(a) * 0.92]} castShadow>
-                <cylinderGeometry args={[0.045, 0.045, 0.62, 16]} />
-                <meshStandardMaterial color={GOLD} metalness={1} roughness={0.2} />
+            {/* Solitaire head seated on the top of the shank */}
+            <group position={[0, 1, 0]}>
+              {/* Basket: tapered wall joining the shank to the stone girdle */}
+              <mesh castShadow position={[0, 0.175, 0]}>
+                <cylinderGeometry args={[0.5, 0.16, 0.97, 48, 1, true]} />
+                <meshStandardMaterial
+                  color={GOLD_DARK}
+                  metalness={1}
+                  roughness={0.28}
+                  side={THREE.DoubleSide}
+                />
               </mesh>
-            ))}
 
-            {/* The diamond */}
-            <mesh geometry={diamondGeo} castShadow>
-              <meshPhysicalMaterial
-                color={DIAMOND}
-                metalness={0}
-                roughness={0.02}
-                clearcoat={1}
-                clearcoatRoughness={0.02}
-                ior={2.42}
-                reflectivity={1}
-                iridescence={1}
-                iridescenceIOR={1.3}
-                iridescenceThicknessRange={[120, 420]}
-                envMapIntensity={1.8}
-                emissive={'#fff3ea'}
-                emissiveIntensity={0.05}
-                flatShading
-                side={THREE.DoubleSide}
-              />
-            </mesh>
+              {/* The brilliant-cut stone, lifted into the basket */}
+              <group position={[0, 0.66, 0]} scale={0.5}>
+                {/* Collet hugging the girdle (matches girdle radius 0.5) */}
+                <mesh castShadow>
+                  <torusGeometry args={[0.5, 0.03, 16, 64]} />
+                  <meshStandardMaterial color={GOLD_DARK} metalness={1} roughness={0.25} />
+                </mesh>
+
+                {/* Four prongs rising from the girdle to the table */}
+                {prongAngles.map((a, i) => (
+                  <mesh
+                    key={i}
+                    position={[Math.cos(a) * 0.42, 0.13, Math.sin(a) * 0.42]}
+                    castShadow
+                  >
+                    <cylinderGeometry args={[0.028, 0.028, 0.34, 16]} />
+                    <meshStandardMaterial color={GOLD} metalness={1} roughness={0.2} />
+                  </mesh>
+                ))}
+
+                {/* The diamond */}
+                <mesh geometry={diamondGeo} castShadow>
+                  <meshPhysicalMaterial
+                    color={DIAMOND}
+                    metalness={0}
+                    roughness={0.02}
+                    clearcoat={1}
+                    clearcoatRoughness={0.02}
+                    ior={2.42}
+                    reflectivity={1}
+                    iridescence={1}
+                    iridescenceIOR={1.3}
+                    iridescenceThicknessRange={[120, 420]}
+                    envMapIntensity={1.8}
+                    emissive={'#fff3ea'}
+                    emissiveIntensity={0.05}
+                    flatShading
+                    side={THREE.DoubleSide}
+                  />
+                </mesh>
+              </group>
+            </group>
           </group>
-        </group>
         </group>
       </group>
     </>
