@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
 import { CheckCircle2, ArrowRight, Headphones, ShieldCheck } from 'lucide-react';
-import SplitHeading from '@/components/anim/SplitHeading';
-import Reveal from '@/components/anim/Reveal';
+import ScrollStage from '@/components/anim/ScrollStage';
 
 export default function DemoSection() {
   const [form, setForm] = React.useState({ firstName: '', lastName: '', email: '', phone: '', message: '' });
@@ -46,22 +45,23 @@ export default function DemoSection() {
   ];
 
   return (
-    <section id="contact" className="mx-auto max-w-7xl overflow-hidden px-6 py-24">
-      <div className="grid items-center gap-16 lg:grid-cols-2">
+    <ScrollStage
+      id="contact"
+      className="flex items-center px-6 py-24 overflow-hidden"
+    >
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-2">
         {/* Left: Text & Trust Factors */}
         <div className="space-y-8">
-          <SplitHeading
-            as="h2"
-            text="Ready to Calibrate Your Business?"
-            className="text-4xl font-bold tracking-tight md:text-5xl"
-          />
+          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+            Ready to Calibrate Your Business?
+          </h2>
 
-          <Reveal as="p" y={20} className="max-w-lg text-lg leading-relaxed text-foreground/70">
+          <p className="max-w-lg text-lg leading-relaxed text-foreground/70">
             Stop juggling spreadsheets and siloed data. See how AurumOS unifies your wholesale and
             retail operations into a single, high-performance ecosystem.
-          </Reveal>
+          </p>
 
-          <Reveal as="ul" stagger={0.12} y={20} className="space-y-4">
+          <ul className="space-y-4">
             {benefits.map((item) => (
               <li
                 key={item}
@@ -71,25 +71,20 @@ export default function DemoSection() {
                 {item}
               </li>
             ))}
-          </Reveal>
+          </ul>
 
-          <Reveal
-            as="div"
-            y={20}
-            className="flex gap-6 border-t border-border pt-6 mt-8"
-          >
+          <div className="flex gap-6 border-t border-border pt-6 mt-8">
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground/60">
               <Headphones className="size-5 text-primary" /> 24/7 Support
             </div>
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground/60">
               <ShieldCheck className="size-5 text-primary" /> Enterprise Security
             </div>
-          </Reveal>
+          </div>
         </div>
 
         {/* Right: Form Card */}
-        <Reveal
-          y={50}
+        <div
           className="rounded-3xl border border-border bg-white/70 p-8 shadow-xl backdrop-blur-sm md:p-10"
         >
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -154,8 +149,8 @@ export default function DemoSection() {
               Book a session directly with our founder. 100% confidential.
             </p>
           </form>
-        </Reveal>
+        </div>
       </div>
-    </section>
+    </ScrollStage>
   );
 }

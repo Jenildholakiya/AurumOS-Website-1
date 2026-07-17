@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
+import type { GemScrollRef } from './gemScroll';
 // NOTE: useReducedMotion is kept from framer-motion purely to detect the
 // user's preference; all animation itself is driven by GSAP / three.js.
 
@@ -15,9 +16,11 @@ const GemScene = dynamic(() => import('./GemScene'), {
 type GemCanvasProps = {
   className?: string;
   height?: number;
+  /** Shared scroll state; when provided the gem's rotation is driven by scroll. */
+  progressRef?: GemScrollRef;
 };
 
-export default function GemCanvas({ className = '', height = 360 }: GemCanvasProps) {
+export default function GemCanvas({ className = '', height = 360, progressRef }: GemCanvasProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const reduced = useReducedMotion();
@@ -40,7 +43,9 @@ export default function GemCanvas({ className = '', height = 360 }: GemCanvasPro
 
   return (
     <div ref={wrapRef} className={`relative ${className}`} style={{ height }}>
-      {inView && <GemScene frameloop={frameloop} className="!absolute inset-0" />}
+      {inView && (
+        <GemScene frameloop={frameloop} className="!absolute inset-0" progressRef={progressRef} />
+      )}
     </div>
   );
 }

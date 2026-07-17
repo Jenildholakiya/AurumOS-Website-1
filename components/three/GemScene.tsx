@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import type { GemScrollRef } from './gemScroll';
 
 // R3F 9.x still constructs `new THREE.Clock()` internally (its event store),
 // which three.js r185 deprecates with a console warning we can't fix from here.
@@ -95,12 +96,17 @@ function buildBrilliantCut(sides = 8, R = 1): THREE.BufferGeometry {
   return geo;
 }
 
-function DiamondRing() {
-  const group = useRef<THREE.Group>(null);
+function DiamondRing({ scrollRef }: { scrollRef?: GemScrollRef }) {
+  const group = useRef<THREE.Group>(null); // pointer-drag rotation (user interaction)
+  const scrollGroup = useRef<THREE.Group>(null); // scroll-linked + idle rotation
   const dragging = useRef(false);
   const last = useRef({ x: 0, y: 0 });
   const { gl, invalidate } = useThree();
   const spinLight = useRef<THREE.PointLight>(null);
+  // Accumulated idle spin (frozen while dragging so the grab feels direct) and a
+  // velocity-driven "flick" boost that eases in then decays back to rest.
+  const idleAngle = useRef(0);
+  const boost = useRef(0);
 
   const diamondGeo = useMemo(() => buildBrilliantCut(8, 1), []);
   useEffect(() => () => diamondGeo.dispose(), [diamondGeo]);
@@ -139,20 +145,37 @@ function DiamondRing() {
     };
   }, [gl, invalidate]);
 
-  // Continuous full 360° spin + gentle bob + a travelling glint light. Runs
-  // only while the render loop is active ('always'), i.e. while in view.
+  // Outer `group` handles pointer-drag only. The inner `scrollGroup` is posed
+  // every frame from the shared scroll store: a scroll-linked rotation (so
+  // scrolling spins the stone to inspect every facet), a gentle idle spin that
+  // freezes while you're dragging, a tilt that opens the crown as you scroll,
+  // and a velocity "flick" boost. Runs only while the render loop is active.
   useFrame((state, delta) => {
     const g = group.current;
     if (!g) return;
-    if (!dragging.current) {
-      g.rotation.y += delta * 0.4; // constant 360° rotation
-      g.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.12;
-    }
     g.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.05;
     if (spinLight.current) {
       const t = state.clock.elapsedTime * 1.6;
       spinLight.current.position.set(Math.cos(t) * 3, 2.4, Math.sin(t) * 3);
     }
+
+    const sg = scrollGroup.current;
+    if (!sg) return;
+    const sr = scrollRef?.current;
+    const p = sr?.progress ?? 0;
+
+    // Flick boost: ease toward the velocity target, then decay to 0.
+    const targetBoost = THREE.MathUtils.clamp((sr?.velocity ?? 0) * 0.00004, -8, 8);
+    boost.current += (targetBoost - boost.current) * 0.08;
+    boost.current *= 0.95;
+    if (sr) sr.velocity *= 0.9; // settle the store when scrolling stops
+
+    // Idle spin accumulates only when not dragging, so the gem holds still
+    // under the pointer and resumes from the same angle afterwards.
+    if (!dragging.current) idleAngle.current += delta * 0.15;
+
+    sg.rotation.y = p * Math.PI * 4 + idleAngle.current + boost.current; // ~2 turns across the section
+    sg.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1 + p * 0.5;
   });
 
   const goldMat = (
@@ -182,6 +205,9 @@ function DiamondRing() {
       </mesh>
 
       <group ref={group}>
+        {/* Scroll-linked / idle rotation wrapper — posed each frame from the
+            shared scroll store. Drag rotation lives on the parent `group`. */}
+        <group ref={scrollGroup}>
         {/* Centering offset so the ring+stone spins around its visual centroid */}
         <group position={[0, -0.15, 0]} scale={0.9}>
           {/* Polished gold band */}
@@ -228,6 +254,7 @@ function DiamondRing() {
             </mesh>
           </group>
         </group>
+        </group>
       </group>
     </>
   );
@@ -236,9 +263,10 @@ function DiamondRing() {
 type GemSceneProps = {
   frameloop?: 'always' | 'demand';
   className?: string;
+  progressRef?: GemScrollRef;
 };
 
-export default function GemScene({ frameloop = 'demand', className }: GemSceneProps) {
+export default function GemScene({ frameloop = 'demand', className, progressRef }: GemSceneProps) {
   return (
     <Canvas
       className={className}
@@ -265,7 +293,7 @@ export default function GemScene({ frameloop = 'demand', className }: GemScenePr
         shadow-camera-bottom={-4}
       />
       <directionalLight position={[-5, -2, -3]} intensity={0.5} color={'#E9C2B6'} />
-      <DiamondRing />
+      <DiamondRing scrollRef={progressRef} />
     </Canvas>
   );
 }

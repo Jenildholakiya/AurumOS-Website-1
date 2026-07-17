@@ -1,13 +1,14 @@
 'use client';
 import { useState } from 'react';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Link from 'next/link'; // Import Link
 
 export default function Navbar() {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const next = latest > 20;
@@ -63,19 +64,62 @@ export default function Navbar() {
               Login
             </Button>
           </Link>
-          
-          <Link href="/get-started">
+
+          <Link href="/get-started" className="hidden md:flex">
             <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 cursor-pointer shadow-lg shadow-primary/20 transition-transform active:scale-95">
               Get Started
             </Button>
           </Link>
-          
-          {/* Mobile Menu Icon (placeholder — not yet wired) */}
-          <div aria-hidden="true" className="md:hidden cursor-pointer p-2 hover:bg-rose-100 rounded-full">
-            <Menu className="w-6 h-6 text-foreground" />
-          </div>
+
+          {/* Mobile menu toggle (wired) */}
+          <button
+            type="button"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="md:hidden flex items-center justify-center rounded-full p-2 cursor-pointer hover:bg-rose-100"
+          >
+            {mobileOpen ? <X className="size-6 text-foreground" /> : <Menu className="size-6 text-foreground" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown — drops below the bar, above the page content. */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="absolute top-full left-0 right-0 z-[55] flex flex-col gap-1 border-b border-rose-100/50 bg-white/90 px-6 py-5 shadow-xl backdrop-blur-xl md:hidden"
+          >
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="rounded-xl px-2 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-rose-100/50 hover:text-primary"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="mt-3 flex flex-col gap-3 border-t border-rose-100/40 pt-4">
+              <Link href="/login" onClick={() => setMobileOpen(false)}>
+                <Button variant="ghost" className="w-full rounded-full cursor-pointer hover:bg-rose-100/50">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/get-started" onClick={() => setMobileOpen(false)}>
+                <Button className="w-full rounded-full bg-primary px-6 hover:bg-primary/90 cursor-pointer shadow-lg shadow-primary/20 active:scale-95">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

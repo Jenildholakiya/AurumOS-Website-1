@@ -19,12 +19,17 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* NOTE: No `scroll-behavior: smooth` here on purpose. CSS smooth-scroll
+       fights GSAP ScrollTrigger's pin/scrub math and makes pinned sections
+       stutter. Section-to-section jumps use JS smooth-scroll where needed. */
   }
 
   body {
     @apply bg-background text-foreground selection:bg-primary/20;
-    overflow-x: hidden;
+    /* `clip` (not `hidden`) so the body does NOT become a scroll container —
+       a body scroll container would break ScrollTrigger's `position: fixed`
+       pinning. `clip` contains horizontal overflow without that side effect. */
+    overflow-x: clip;
   }
 
   /* Force pointer for all interactive elements */

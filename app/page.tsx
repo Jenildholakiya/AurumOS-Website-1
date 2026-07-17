@@ -1,4 +1,3 @@
-// app/page.tsx
 import DemoSection from "@/components/marketing/DemoSection";
 import FeaturesBento from "@/components/marketing/FeaturesBento";
 import FounderSection from "@/components/marketing/FounderSection";

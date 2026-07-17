@@ -1,32 +1,18 @@
 'use client';
-import { useRef } from 'react';
 import Image from 'next/image';
-import SplitHeading from '@/components/anim/SplitHeading';
-import Reveal from '@/components/anim/Reveal';
-import { gsap, useGSAP } from '@/components/anim/gsap/register';
+import ScrollStage from '@/components/anim/ScrollStage';
 
 export default function FounderSection() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      // Scroll-linked parallax on the portrait (transform-only, compositor-safe).
-      gsap.to('[data-founder-img]', {
-        yPercent: -12,
-        ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 1 },
-      });
-    },
-    { scope: root },
-  );
-
   return (
-    <section ref={root} className="bg-primary/5 px-6 py-24">
-      <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-12">
+    <ScrollStage
+      id="founder"
+      className="flex items-center bg-primary/5 px-6 py-24 overflow-hidden"
+    >
+      <div className="mx-auto grid w-full max-w-6xl items-start gap-12 lg:grid-cols-12">
         {/* Left Column: Image & Signature */}
         <div className="space-y-8 lg:col-span-4">
           <div className="group relative aspect-[9/16] overflow-hidden rounded-3xl shadow-2xl">
-            <div data-founder-img className="absolute inset-0 scale-[1.18]">
+            <div className="absolute inset-0 scale-[1.3]">
               <Image
                 src="/founder.jpeg"
                 alt="Jenil Dholakiya"
@@ -48,13 +34,11 @@ export default function FounderSection() {
 
         {/* Right Column: Narrative */}
         <div className="lg:col-span-8 space-y-12">
-          <SplitHeading
-            as="h2"
-            text="Engineering the Future of the Jewellery Trade"
-            className="text-4xl font-bold tracking-tight md:text-5xl"
-          />
+          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+            Engineering the Future of the Jewellery Trade
+          </h2>
 
-          <Reveal as="div" stagger={0.18} y={30} className="space-y-8 text-lg leading-relaxed text-foreground/80">
+          <div className="space-y-8 text-lg leading-relaxed text-foreground/80">
             <div>
               <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">The Catalyst</h3>
               <p>
@@ -84,9 +68,9 @@ export default function FounderSection() {
                 experiences — until technology becomes an invisible thread strengthening your craft.
               </p>
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
-    </section>
+    </ScrollStage>
   );
 }
