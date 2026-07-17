@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, type Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Menu, X, ArrowRight } from 'lucide-react';
@@ -16,6 +16,22 @@ export default function Navbar() {
     // re-render on every scroll pixel -> smoother scrolling).
     setIsScrolled((prev) => (prev !== next ? next : prev));
   });
+
+  // Lock background scroll + allow ESC-to-close while the drawer is open.
+  // Without the lock, the page behind scrolls while the menu is open.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = overflow;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
 
   // Mapping links to actual routes
   const navLinks = [
@@ -37,9 +53,10 @@ export default function Navbar() {
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
         isScrolled ? "bg-white/70 backdrop-blur-xl border-b border-rose-100/50 py-3" : "bg-transparent py-6"
       }`}
@@ -93,8 +110,11 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+    </motion.nav>
 
-      {/* Mobile side drawer — slides in from the right with a staggered reveal. */}
+    {/* Mobile side drawer — slides in from the right with a staggered reveal.
+        Rendered as a sibling of <nav> (not a child) so the nav's framer-motion
+        transform can't create a containing block that breaks position:fixed. */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -175,6 +195,6 @@ export default function Navbar() {
           </motion.aside>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 }
