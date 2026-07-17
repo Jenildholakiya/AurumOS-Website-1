@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, type Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link'; // Import Link
 
 export default function Navbar() {
@@ -25,6 +25,16 @@ export default function Navbar() {
     { name: 'Pricing', href: '/pricing' },
     { name: 'Security', href: '/security' },
   ];
+
+  // Staggered reveal for the drawer's nav links on open.
+  const drawerContainer: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
+  };
+  const drawerItem: Variants = {
+    hidden: { opacity: 0, x: 28 },
+    show: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 350, damping: 30 } },
+  };
 
   return (
     <motion.nav
@@ -84,28 +94,70 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile dropdown — drops below the bar, above the page content. */}
+      {/* Mobile side drawer — slides in from the right with a staggered reveal. */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="absolute top-full left-0 right-0 z-[55] flex flex-col gap-1 border-b border-rose-100/50 bg-white/90 px-6 py-5 shadow-xl backdrop-blur-xl md:hidden"
+            key="mobile-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm md:hidden"
+          />
+        )}
+        {mobileOpen && (
+          <motion.aside
+            key="mobile-drawer"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.38, ease: [0.32, 0.72, 0, 1] }}
+            className="fixed top-0 right-0 z-[60] flex h-full w-[84%] max-w-sm flex-col bg-white/95 backdrop-blur-xl border-l border-rose-100/60 shadow-2xl md:hidden"
           >
-            {navLinks.map((link) => (
+            {/* Header: brand + close */}
+            <div className="flex items-center justify-between px-6 pt-7 pb-5 border-b border-rose-100/50">
               <Link
-                key={link.name}
-                href={link.href}
+                href="/"
                 onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-2 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-rose-100/50 hover:text-primary"
+                className="text-xl font-bold tracking-tighter cursor-pointer"
               >
-                {link.name}
+                Aurum<span className="text-primary">OS</span>
               </Link>
-            ))}
-            <div className="mt-3 flex flex-col gap-3 border-t border-rose-100/40 pt-4">
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center rounded-full p-2 cursor-pointer text-foreground/70 transition-colors hover:bg-rose-100 hover:text-foreground"
+              >
+                <X className="size-6" />
+              </button>
+            </div>
+
+            {/* Nav links — staggered in on open */}
+            <motion.nav
+              variants={drawerContainer}
+              initial="hidden"
+              animate="show"
+              className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5"
+            >
+              {navLinks.map((link) => (
+                <motion.div key={link.name} variants={drawerItem}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-medium text-foreground/80 transition-colors hover:bg-primary/5 hover:text-primary"
+                  >
+                    <span>{link.name}</span>
+                    <ArrowRight className="size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.nav>
+
+            {/* Footer actions */}
+            <div className="flex flex-col gap-3 border-t border-rose-100/50 px-6 py-5">
               <Link href="/login" onClick={() => setMobileOpen(false)}>
                 <Button variant="ghost" className="w-full rounded-full cursor-pointer hover:bg-rose-100/50">
                   Login
@@ -116,8 +168,11 @@ export default function Navbar() {
                   Get Started
                 </Button>
               </Link>
+              <p className="mt-1 text-center text-xs text-foreground/40">
+                Enterprise jewellery ERP
+              </p>
             </div>
-          </motion.div>
+          </motion.aside>
         )}
       </AnimatePresence>
     </motion.nav>
