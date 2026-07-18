@@ -1,6 +1,12 @@
 'use client';
 import { useRef } from 'react';
-import { gsap, useGSAP } from '@/components/anim/gsap/register';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+} from 'framer-motion';
 
 type TiltCardProps = {
   children: React.ReactNode;
@@ -11,9 +17,10 @@ type TiltCardProps = {
 };
 
 /**
- * Interactive 3D tilt card driven by GSAP. A pointer-following cursor tracks
- * the pointer (quickTo for buttery smoothing) and paints a rose-gold glow that
- * follows the cursor. Pure transform/opacity — no layout thrash, no jank.
+ * Interactive 3D tilt card. Pointer position drives a spring-smoothed
+ * rotateX/rotateY plus a cursor-following rose-gold glow — implemented with
+ * framer-motion (already bundled) so GSAP stays out of the initial load.
+ * Pure transform/opacity — no layout thrash.
  */
 export default function TiltCard({
   children,
@@ -22,56 +29,50 @@ export default function TiltCard({
   glow = true,
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLSpanElement>(null);
+  const px = useMotionValue(0); // -0.5 .. 0.5
+  const py = useMotionValue(0);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
+  const rotX = useSpring(useTransform(py, [-0.5, 0.5], [tilt, -tilt]), {
+    stiffness: 150,
+    damping: 15,
+  });
+  const rotY = useSpring(useTransform(px, [-0.5, 0.5], [-tilt, tilt]), {
+    stiffness: 150,
+    damping: 15,
+  });
 
-      gsap.set(el, { transformPerspective: 900 });
-      const rotX = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' });
-      const rotY = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
+  const glowX = useTransform(px, [-0.5, 0.5], ['0%', '100%']);
+  const glowY = useTransform(py, [-0.5, 0.5], ['0%', '100%']);
+  const glowBg = useMotionTemplate`radial-gradient(260px circle at ${glowX} ${glowY}, rgba(199,123,107,0.20), transparent 62%)`;
 
-      const onMove = (e: PointerEvent) => {
-        const r = el.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        rotY(px * tilt * 2);
-        rotX(-py * tilt * 2);
-        if (glowRef.current) {
-          gsap.set(glowRef.current, {
-            opacity: 1,
-            background: `radial-gradient(260px circle at ${(px + 0.5) * 100}% ${(py + 0.5) * 100}%, rgba(199,123,107,0.20), transparent 62%)`,
-          });
-        }
-      };
-      const onLeave = () => {
-        rotX(0);
-        rotY(0);
-        if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.3 });
-      };
-
-      el.addEventListener('pointermove', onMove);
-      el.addEventListener('pointerleave', onLeave);
-      return () => {
-        el.removeEventListener('pointermove', onMove);
-        el.removeEventListener('pointerleave', onLeave);
-      };
-    },
-    { scope: ref },
-  );
+  const onMove = (e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    px.set((e.clientX - r.left) / r.width - 0.5);
+    py.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const onLeave = () => {
+    px.set(0);
+    py.set(0);
+  };
 
   return (
-    <div ref={ref} className={`group/tilt relative [transform-style:preserve-3d] ${className}`}>
+    <motion.div
+      ref={ref}
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
+      style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 900 }}
+      className={`group/tilt relative [transform-style:preserve-3d] ${className}`}
+    >
       {children}
       {glow && (
-        <span
-          ref={glowRef}
+        <motion.span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0"
+          style={{ background: glowBg }}
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover/tilt:opacity-100"
         />
       )}
-    </div>
+    </motion.div>
   );
 }

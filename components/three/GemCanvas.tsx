@@ -30,7 +30,12 @@ export default function GemCanvas({ className = '', height = 360, progressRef }:
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: '300px' },
+      // Negative bottom margin: the hero is a full viewport tall, so the gem
+      // canvas sits right at the fold. A positive margin would fire this
+      // immediately on load and pull the ~890KB three.js chunk into the initial
+      // bundle (killing TBT). Requiring it to be ~30% into view keeps three.js
+      // off the critical path until the user actually scrolls to it.
+      { rootMargin: '0px 0px -30% 0px' },
     );
     observer.observe(el);
     return () => observer.disconnect();

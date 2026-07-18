@@ -1,29 +1,22 @@
 'use client';
-import { useRef } from 'react';
-import { gsap, useGSAP } from '@/components/anim/gsap/register';
+import { motion, useScroll, useSpring } from 'framer-motion';
 
-/** Rose-gold scroll-progress bar pinned to the top, scrubbed by GSAP ScrollTrigger. */
+/** Rose-gold scroll-progress bar pinned to the top. Uses framer-motion's
+ *  useScroll (already in the bundle) instead of GSAP, so no extra animation
+ *  library is pulled into the initial load. */
 export default function ScrollProgress() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    gsap.fromTo(
-      ref.current,
-      { scaleX: 0 },
-      {
-        scaleX: 1,
-        ease: 'none',
-        scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
-      },
-    );
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
   });
 
   return (
-    <div
-      ref={ref}
+    <motion.div
       aria-hidden
+      style={{ scaleX }}
       className="fixed left-0 right-0 top-0 z-[60] h-0.5 origin-left bg-primary"
-      style={{ transform: 'scaleX(0)' }}
     />
   );
 }

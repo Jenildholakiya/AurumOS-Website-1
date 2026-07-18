@@ -7,10 +7,12 @@
   /* Rose Gold Theme Variables */
   --color-background: oklch(0.98 0.015 45);
   --color-foreground: oklch(0.25 0.02 45);
-  --color-primary: oklch(0.65 0.12 25);
+  /* Primary is intentionally deep (oklch ~0.50) so that white text on
+     bg-primary AND rose text on light backgrounds both clear WCAG 4.5:1. */
+  --color-primary: oklch(0.50 0.14 25);
   --color-primary-foreground: oklch(0.98 0 0);
   --color-border: oklch(0.90 0.02 45);
-  --color-ring: oklch(0.65 0.12 25);
+  --color-ring: oklch(0.50 0.14 25);
 }
 
 @layer base {
