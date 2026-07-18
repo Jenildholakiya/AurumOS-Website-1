@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-border flex justify-between items-center">
-          <p className="text-sm text-foreground/60">© {new Date().getFullYear()} AurumOS by VertexWeb.</p>
+          <p className="text-sm text-foreground/70">© {new Date().getFullYear()} AurumOS by VertexWeb.</p>
           <motion.button onClick={scrollToTop} aria-label="Back to top" className="bg-primary/10 p-3 rounded-full text-primary">
             <FontAwesomeIcon icon={faArrowUp} />
           </motion.button>

@@ -112,7 +112,7 @@ export default function FeaturesPage() {
             text="Built for Scale. Calibrated for Precision."
             className="text-4xl font-bold tracking-tight md:text-5xl"
           />
-          <Reveal as="p" y={20} className="text-foreground/60">
+          <Reveal as="p" y={20} className="text-foreground/70">
             Every module is engineered to eliminate the friction of manual administration.
           </Reveal>
         </div>
@@ -169,7 +169,7 @@ export default function FeaturesPage() {
                     </div>
                     <div>
                       <h4 className="text-xl font-bold">{item.title}</h4>
-                      <p className="text-foreground/50">{item.desc}</p>
+                      <p className="text-foreground/70">{item.desc}</p>
                     </div>
                   </div>
                 );

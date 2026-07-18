@@ -128,7 +128,7 @@ export default function PricingPage() {
           Investment in <br /><span className="text-primary italic">Absolute Integrity.</span>
         </motion.h1>
 
-        <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-foreground/60 text-lg max-w-xl mx-auto">
+        <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-foreground/70 text-lg max-w-xl mx-auto">
           One-time license fee, billed with an annual maintenance plan. Upgrade anytime as your operation grows.
         </motion.p>
       </section>
@@ -155,11 +155,11 @@ export default function PricingPage() {
                 <span className="text-5xl font-bold">₹{plan.price}</span>
                 <span className="text-foreground/40 text-sm">one-time</span>
               </div>
-              <div className="text-foreground/50 text-sm">
+              <div className="text-foreground/70 text-sm">
                 + ₹{plan.annual}/yr maintenance
               </div>
 
-              <p className="text-foreground/60 text-sm leading-relaxed">{plan.desc}</p>
+              <p className="text-foreground/70 text-sm leading-relaxed">{plan.desc}</p>
               
               <div className="h-px bg-border" />
               
@@ -216,7 +216,7 @@ export default function PricingPage() {
       <section className="py-40 px-6 max-w-7xl mx-auto">
          <div className="text-center mb-20 space-y-4">
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Onboarding in Weeks. <br />Not Months.</h2>
-            <p className="text-foreground/60 text-xl">Our strategic engineers handle the heavy lifting.</p>
+            <p className="text-foreground/70 text-xl">Our strategic engineers handle the heavy lifting.</p>
          </div>
          <div className="grid md:grid-cols-3 gap-12 relative">
             <div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-primary/20 -z-10" />
@@ -229,7 +229,7 @@ export default function PricingPage() {
                  <div className="size-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold mb-6">{step.step}</div>
                  <step.icon className="text-primary mb-4" size={32} />
                  <h4 className="text-2xl font-bold mb-3">{step.t}</h4>
-                 <p className="text-foreground/60 text-sm leading-relaxed">{step.d}</p>
+                 <p className="text-foreground/70 text-sm leading-relaxed">{step.d}</p>
               </motion.div>
             ))}
          </div>
@@ -273,7 +273,7 @@ export default function PricingPage() {
           ].map((faq, i) => (
             <motion.div key={i} {...fadeInUp} className="text-left p-8 rounded-2xl bg-card border border-border">
               <h4 className="font-bold mb-2">Q: {faq.q}</h4>
-              <p className="text-foreground/60 text-sm leading-relaxed">{faq.a}</p>
+              <p className="text-foreground/70 text-sm leading-relaxed">{faq.a}</p>
             </motion.div>
           ))}
         </div>

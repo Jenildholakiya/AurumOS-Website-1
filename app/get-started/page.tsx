@@ -43,7 +43,7 @@ export default function GetStartedPage() {
         </Link>
 
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">Get started</h1>
-        <p className="text-foreground/60 text-sm mb-8">
+        <p className="text-foreground/70 text-sm mb-8">
           Provision your jewellery command center in minutes.
         </p>
 
@@ -53,7 +53,7 @@ export default function GetStartedPage() {
               <Check size={24} />
             </div>
             <h2 className="text-xl font-bold">You’re on the list</h2>
-            <p className="text-foreground/60 text-sm">
+            <p className="text-foreground/70 text-sm">
               Provisioning isn’t wired up yet — this is a placeholder confirmation for{' '}
               <span className="font-medium text-foreground">{email}</span> on the{' '}
               <span className="font-medium text-foreground capitalize">{plan}</span> plan.
@@ -135,7 +135,7 @@ export default function GetStartedPage() {
                     }`}
                   >
                     <div className="font-bold text-sm">{p.name}</div>
-                    <div className="text-[11px] text-foreground/50">{p.note}</div>
+                    <div className="text-[11px] text-foreground/70">{p.note}</div>
                   </button>
                 ))}
               </div>
@@ -147,7 +147,7 @@ export default function GetStartedPage() {
           </form>
         )}
 
-        <p className="mt-8 text-center text-sm text-foreground/60">
+        <p className="mt-8 text-center text-sm text-foreground/70">
           Already have an account?{' '}
           <Link href="/login" className="font-semibold text-primary hover:underline">
             Sign in

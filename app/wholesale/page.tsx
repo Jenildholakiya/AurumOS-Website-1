@@ -108,7 +108,7 @@ export default function WholesalePage() {
               <div className="text-primary"><stat.icon size={24} /></div>
               <div className="text-3xl font-bold">{stat.val}</div>
               <div className="text-sm font-bold uppercase tracking-tighter text-foreground/40">{stat.label}</div>
-              <p className="text-xs text-foreground/50">{stat.desc}</p>
+              <p className="text-xs text-foreground/70">{stat.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -130,7 +130,7 @@ export default function WholesalePage() {
                 <Box size={32} />
               </div>
               <h3 className="text-4xl font-bold">Intelligent <br />Batch Processing</h3>
-              <p className="text-foreground/60 text-lg">
+              <p className="text-foreground/70 text-lg">
                 Upload 1,000+ items via HUID Excel or Direct Scanner integration. Our system automatically calibrates weight discrepancies and hallmark logs.
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function WholesalePage() {
           <motion.div variants={itemVariants} className="md:col-span-4 p-10 rounded-[32px] border bg-card hover:border-primary/50 transition-all">
             <Truck className="text-primary mb-6" />
             <h3 className="text-xl font-bold mb-2">Branch Transfers</h3>
-            <p className="text-sm text-foreground/50">Secure "In-Transit" status tracking for moving gold between showrooms with digital OTP verification.</p>
+            <p className="text-sm text-foreground/70">Secure "In-Transit" status tracking for moving gold between showrooms with digital OTP verification.</p>
           </motion.div>
 
           {/* Analytics Module */}
@@ -162,7 +162,7 @@ export default function WholesalePage() {
             <div className="hidden md:block size-32 rounded-full border-8 border-primary/10 border-t-primary animate-spin" />
             <div className="space-y-2">
                <h3 className="text-xl font-bold">Metal Volatility Guard</h3>
-               <p className="text-sm text-foreground/50 leading-relaxed">
+               <p className="text-sm text-foreground/70 leading-relaxed">
                  AurumOS automatically re-calculates your total wholesale inventory value based on live LBMA gold rates, protecting your margins against market swings.
                </p>
             </div>
@@ -195,7 +195,7 @@ export default function WholesalePage() {
             ].map((item, i) => (
               <div key={i} className="p-6 rounded-2xl bg-background border border-border">
                 <h4 className="font-bold mb-1">{item.t}</h4>
-                <p className="text-xs text-foreground/50">{item.d}</p>
+                <p className="text-xs text-foreground/70">{item.d}</p>
               </div>
             ))}
           </div>
@@ -207,7 +207,7 @@ export default function WholesalePage() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
           <div className="lg:w-1/2 space-y-8">
             <h2 className="text-5xl font-bold tracking-tight">One Warehouse. <br />Global Visibility.</h2>
-            <p className="text-lg text-foreground/60">
+            <p className="text-lg text-foreground/70">
               Whether your stock is in a vault in Mumbai, a showroom in Dubai, or a workshop in Surat, AurumOS provides a unified "Single Source of Truth."
             </p>
             <div className="space-y-4">

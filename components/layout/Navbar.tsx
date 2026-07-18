@@ -54,15 +54,15 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
+      <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
         isScrolled ? "bg-white/70 backdrop-blur-xl border-b border-rose-100/50 py-3" : "bg-transparent py-6"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        
+      <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold cursor-pointer tracking-tighter flex items-center">
           Aurum<span className="text-primary">OS</span>
@@ -76,7 +76,7 @@ export default function Navbar() {
                 <span className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
                   {link.name}
                 </span>
-                <motion.div 
+                <motion.div
                   className="absolute -bottom-1 left-0 h-[2px] bg-primary w-0 group-hover:w-full transition-all duration-300"
                 />
               </motion.div>
@@ -109,8 +109,8 @@ export default function Navbar() {
             {mobileOpen ? <X className="size-6 text-foreground" /> : <Menu className="size-6 text-foreground" />}
           </button>
         </div>
-      </div>
-    </motion.nav>
+      </nav>
+    </motion.header>
 
     {/* Mobile side drawer — slides in from the right with a staggered reveal.
         Rendered as a sibling of <nav> (not a child) so the nav's framer-motion

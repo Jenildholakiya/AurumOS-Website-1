@@ -24,7 +24,7 @@ export default function Hero() {
             <span className="italic text-primary">Synchronized.</span>
           </h1>
 
-          <p className="max-w-lg text-xl leading-relaxed text-foreground/80">
+          <p className="max-w-lg text-xl leading-relaxed text-foreground/90">
             AurumOS unifies wholesale inventory, retail point-of-sale, and hallmarking
             compliance into one beautifully engineered command core — so your craft
             stays the focus, not the paperwork.
@@ -50,7 +50,16 @@ export default function Hero() {
         {/* Floating Dashboard Preview */}
         <div
           className="group relative cursor-pointer"
+          role="button"
+          tabIndex={0}
+          aria-label="Open the AurumOS executive dashboard preview in a new tab"
           onClick={() => window.open('/dashboard.png', '_blank')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              window.open('/dashboard.png', '_blank');
+            }
+          }}
         >
           <div className="rounded-3xl border border-border/50 bg-white/50 p-2 shadow-2xl backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.02]">
             <Image

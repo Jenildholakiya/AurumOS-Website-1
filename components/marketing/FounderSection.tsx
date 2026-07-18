@@ -26,7 +26,7 @@ export default function FounderSection() {
 
           <div className="pl-2">
             <div className="font-['Dancing_Script',_cursive] text-4xl text-primary">Jenil Dholakiya</div>
-            <div className="mt-2 text-sm font-medium uppercase tracking-[0.2em] text-foreground/50">
+            <div className="mt-2 text-sm font-medium uppercase tracking-[0.2em] text-foreground/70">
               Strategic Founder &amp; CTO
             </div>
           </div>

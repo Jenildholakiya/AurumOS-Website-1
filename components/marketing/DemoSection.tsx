@@ -74,10 +74,10 @@ export default function DemoSection() {
           </ul>
 
           <div className="flex gap-6 border-t border-border pt-6 mt-8">
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground/60">
+            <div className="flex items-center gap-2 text-sm font-semibold text-foreground/70">
               <Headphones className="size-5 text-primary" /> 24/7 Support
             </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground/60">
+            <div className="flex items-center gap-2 text-sm font-semibold text-foreground/70">
               <ShieldCheck className="size-5 text-primary" /> Enterprise Security
             </div>
           </div>

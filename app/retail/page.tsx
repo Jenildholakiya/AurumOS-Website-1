@@ -107,7 +107,7 @@ export default function RetailPage() {
       <section className="py-32 px-6 max-w-7xl mx-auto">
          <motion.div {...fadeInUp} className="text-center mb-16">
             <h2 className="text-4xl font-bold">Gold Savings Engine</h2>
-            <p className="text-foreground/60">Automate your most complex monthly schemes.</p>
+            <p className="text-foreground/70">Automate your most complex monthly schemes.</p>
          </motion.div>
          <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -118,7 +118,7 @@ export default function RetailPage() {
               <div key={i} className="p-8 border rounded-3xl hover:border-primary transition-all">
                 <Gem className="text-primary mb-6" />
                 <h4 className="font-bold text-xl mb-2">{c.title}</h4>
-                <p className="text-foreground/60">{c.desc}</p>
+                <p className="text-foreground/70">{c.desc}</p>
               </div>
             ))}
          </div>
@@ -129,7 +129,7 @@ export default function RetailPage() {
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeInUp} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Empower Your Sales Force</h2>
-            <p className="text-foreground/60">Turn every employee into a top-performer with real-time KPI tracking.</p>
+            <p className="text-foreground/70">Turn every employee into a top-performer with real-time KPI tracking.</p>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -140,7 +140,7 @@ export default function RetailPage() {
               <motion.div key={i} whileHover={{ y: -10 }} className="p-10 rounded-[32px] bg-background border">
                 <card.icon className="text-primary mb-6" size={40} />
                 <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
-                <p className="text-foreground/60">{card.desc}</p>
+                <p className="text-foreground/70">{card.desc}</p>
               </motion.div>
             ))}
           </div>

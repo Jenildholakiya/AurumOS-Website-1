@@ -34,7 +34,7 @@ export default function SecurityBanner() {
                   <span className="inline-block size-8">{item.icon}</span>
                 </div>
                 <h4 className="text-lg font-bold">{item.title}</h4>
-                <p className="text-sm leading-relaxed text-foreground/60">{item.desc}</p>
+                <p className="text-sm leading-relaxed text-foreground/70">{item.desc}</p>
               </div>
             ))}
           </Reveal>

@@ -36,7 +36,7 @@ export default function LoginPage() {
         </Link>
 
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">Welcome back</h1>
-        <p className="text-foreground/60 text-sm mb-8">
+        <p className="text-foreground/70 text-sm mb-8">
           Sign in to your enterprise jewellery console.
         </p>
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
               <Lock size={24} />
             </div>
             <h2 className="text-xl font-bold">Check your inbox</h2>
-            <p className="text-foreground/60 text-sm">
+            <p className="text-foreground/70 text-sm">
               Authentication isn’t wired up yet — this is a placeholder confirmation for{' '}
               <span className="font-medium text-foreground">{email}</span>.
             </p>
@@ -98,7 +98,7 @@ export default function LoginPage() {
           </form>
         )}
 
-        <p className="mt-8 text-center text-sm text-foreground/60">
+        <p className="mt-8 text-center text-sm text-foreground/70">
           New to AurumOS?{' '}
           <Link href="/get-started" className="font-semibold text-primary hover:underline">
             Get started

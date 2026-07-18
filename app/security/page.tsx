@@ -104,7 +104,7 @@ export default function SecurityPage() {
                 <pillar.icon size={24} />
               </div>
               <h3 className="text-xl font-bold mb-3">{pillar.title}</h3>
-              <p className="text-sm text-foreground/50 leading-relaxed">{pillar.desc}</p>
+              <p className="text-sm text-foreground/70 leading-relaxed">{pillar.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -123,14 +123,14 @@ export default function SecurityPage() {
                 <History className="text-primary shrink-0" />
                 <div>
                   <h4 className="font-bold">Temporal Versioning</h4>
-                  <p className="text-sm text-foreground/50">"Time Travel" to see any stock state at any precise millisecond in history.</p>
+                  <p className="text-sm text-foreground/70">"Time Travel" to see any stock state at any precise millisecond in history.</p>
                 </div>
               </div>
               <div className="flex gap-4 p-6 rounded-2xl bg-background border border-border">
                 <Database className="text-primary shrink-0" />
                 <div>
                   <h4 className="font-bold">Checksum Validation</h4>
-                  <p className="text-sm text-foreground/50">Continuous background integrity checks ensure zero database corruption.</p>
+                  <p className="text-sm text-foreground/70">Continuous background integrity checks ensure zero database corruption.</p>
                 </div>
               </div>
             </div>
@@ -167,14 +167,14 @@ export default function SecurityPage() {
             <motion.div {...fadeInUp} className="p-10 rounded-[40px] border bg-card space-y-6">
               <Cpu className="text-primary" size={40} />
               <h3 className="text-2xl font-bold">IP & Device Pinning</h3>
-              <p className="text-foreground/60 leading-relaxed">
+              <p className="text-foreground/70 leading-relaxed">
                 Ensure AurumOS is only accessible from your physical showroom. Restrict logins to specific IP ranges and authorized MAC addresses, preventing unauthorized remote access.
               </p>
             </motion.div>
             <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="p-10 rounded-[40px] border bg-card space-y-6">
               <Lock className="text-primary" size={40} />
               <h3 className="text-2xl font-bold">Encrypted Local Cache</h3>
-              <p className="text-foreground/60 leading-relaxed">
+              <p className="text-foreground/70 leading-relaxed">
                 Even during internet outages, local data is encrypted with ephemeral keys, ensuring that your inventory remains secure if a device is physically compromised.
               </p>
             </motion.div>
