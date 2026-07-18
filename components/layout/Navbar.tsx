@@ -77,7 +77,7 @@ export default function Navbar() {
                   {link.name}
                 </span>
                 <motion.div
-                  className="absolute -bottom-1 left-0 h-[2px] bg-primary w-0 group-hover:w-full transition-all duration-300"
+                  className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100"
                 />
               </motion.div>
             </Link>
@@ -188,7 +188,7 @@ export default function Navbar() {
                   Get Started
                 </Button>
               </Link>
-              <p className="mt-1 text-center text-xs text-foreground/40">
+              <p className="mt-1 text-center text-xs text-foreground/70">
                 Enterprise jewellery ERP
               </p>
             </div>

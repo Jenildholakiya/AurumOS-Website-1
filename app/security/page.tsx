@@ -76,7 +76,7 @@ export default function SecurityPage() {
             <motion.div key={i} {...fadeInUp} transition={{ delay: i * 0.1 }} className="flex items-center gap-3">
               <item.icon size={18} className="text-primary" />
               <div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-foreground/40 leading-none">{item.label}</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-foreground/70 leading-none">{item.label}</div>
                 <div className="text-lg font-bold">{item.val}</div>
               </div>
             </motion.div>
@@ -146,7 +146,7 @@ export default function SecurityPage() {
                 <div className="size-3 rounded-full bg-amber-500/20" />
                 <div className="size-3 rounded-full bg-emerald-500/20" />
               </div>
-              <div className="font-mono text-sm space-y-2 text-foreground/40">
+              <div className="font-mono text-sm space-y-2 text-foreground/70">
                 <p className="text-primary animate-pulse">{`> initializing_secure_ledger...`}</p>
                 <p>{`> [SYSTEM] item_882_sync: success`}</p>
                 <p>{`> [HASH] 0x882f...a12c verified`}</p>
@@ -230,7 +230,7 @@ export default function SecurityPage() {
           </p>
           <div className="mt-12">
             <div className="font-['Dancing_Script',_cursive] text-6xl text-primary mb-2">Jenil Dholakiya</div>
-            <div className="text-xs uppercase tracking-[0.4em] font-bold text-foreground/40">Strategic Founder & CTO</div>
+            <div className="text-xs uppercase tracking-[0.4em] font-bold text-foreground/70">Strategic Founder & CTO</div>
           </div>
         </motion.div>
       </section>

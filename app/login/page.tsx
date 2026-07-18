@@ -61,7 +61,7 @@ export default function LoginPage() {
                 Work email
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 size-4" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/70 size-4" />
                 <input
                   id="email"
                   type="email"
@@ -79,7 +79,7 @@ export default function LoginPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 size-4" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/70 size-4" />
                 <input
                   id="password"
                   type="password"

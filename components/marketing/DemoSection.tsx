@@ -145,7 +145,7 @@ export default function DemoSection() {
             {status === 'error' && (
               <p className="text-center text-sm font-semibold text-red-600">{errorMsg}</p>
             )}
-            <p className="text-center text-xs text-foreground/40">
+            <p className="text-center text-xs text-foreground/70">
               Book a session directly with our founder. 100% confidential.
             </p>
           </form>

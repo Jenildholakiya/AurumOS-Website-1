@@ -65,7 +65,7 @@ export default function WholesalePage() {
                     <TrendingUp />
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-foreground/40 font-bold uppercase">Live Inventory Value</div>
+                    <div className="text-xs text-foreground/70 font-bold uppercase">Live Inventory Value</div>
                     <div className="text-2xl font-bold">₹84.22 Cr</div>
                   </div>
                </div>
@@ -73,10 +73,10 @@ export default function WholesalePage() {
                   {[72, 54, 88].map((w, i) => (
                     <div key={i} className="h-4 bg-primary/5 rounded-full w-full overflow-hidden">
                        <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${w}%` }}
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: w / 100 }}
                         transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
-                        className="h-full bg-primary/40"
+                        className="h-full w-full origin-left bg-primary/40"
                        />
                     </div>
                   ))}
@@ -107,7 +107,7 @@ export default function WholesalePage() {
             >
               <div className="text-primary"><stat.icon size={24} /></div>
               <div className="text-3xl font-bold">{stat.val}</div>
-              <div className="text-sm font-bold uppercase tracking-tighter text-foreground/40">{stat.label}</div>
+              <div className="text-sm font-bold uppercase tracking-tighter text-foreground/70">{stat.label}</div>
               <p className="text-xs text-foreground/70">{stat.desc}</p>
             </motion.div>
           ))}
@@ -145,7 +145,11 @@ export default function WholesalePage() {
             <p className="text-background/50 text-sm">
               Give your retailers a private dashboard to browse collections, view real-time gold rates, and place bulk orders without a single phone call.
             </p>
-            <button className="mt-8 size-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all">
+            <button
+              type="button"
+              aria-label="Open the B2B Trade Portal"
+              className="mt-8 size-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all"
+            >
               <ArrowUpRight />
             </button>
           </motion.div>

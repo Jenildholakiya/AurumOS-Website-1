@@ -153,7 +153,7 @@ export default function PricingPage() {
 
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold">₹{plan.price}</span>
-                <span className="text-foreground/40 text-sm">one-time</span>
+                <span className="text-foreground/70 text-sm">one-time</span>
               </div>
               <div className="text-foreground/70 text-sm">
                 + ₹{plan.annual}/yr maintenance
@@ -191,7 +191,7 @@ export default function PricingPage() {
         <div className="max-w-5xl mx-auto">
           <motion.h2 {...fadeInUp} className="text-4xl font-bold text-center mb-20 tracking-tight">Technical Capability <span className="text-primary">Matrix</span></motion.h2>
           <div className="rounded-[40px] border border-border bg-background overflow-hidden shadow-xl">
-             <div className="grid grid-cols-4 p-8 border-b border-border bg-card/50 text-xs font-bold uppercase tracking-widest text-foreground/40">
+             <div className="grid grid-cols-4 p-8 border-b border-border bg-card/50 text-xs font-bold uppercase tracking-widest text-foreground/70">
                 <div className="col-span-1">Feature</div>
                 <div className="text-center">Lite</div>
                 <div className="text-center">Pro</div>

@@ -49,7 +49,7 @@ export default function RetailPage() {
             { label: "Showroom Uptime", val: "99.99%" },
           ].map((stat, i) => (
             <motion.div key={i} {...fadeInUp} className="text-center">
-              <div className="text-sm font-bold uppercase tracking-widest text-foreground/40">{stat.label}</div>
+              <div className="text-sm font-bold uppercase tracking-widest text-foreground/70">{stat.label}</div>
               <div className="text-3xl font-bold text-primary">{stat.val}</div>
             </motion.div>
           ))}

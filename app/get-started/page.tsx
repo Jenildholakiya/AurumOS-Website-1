@@ -70,7 +70,7 @@ export default function GetStartedPage() {
                   Full name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 size-4" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/70 size-4" />
                   <input
                     id="name"
                     type="text"
@@ -88,7 +88,7 @@ export default function GetStartedPage() {
                   Showroom / Company
                 </label>
                 <div className="relative">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 size-4" />
+                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/70 size-4" />
                   <input
                     id="company"
                     type="text"
@@ -107,7 +107,7 @@ export default function GetStartedPage() {
                 Work email
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 size-4" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/70 size-4" />
                 <input
                   id="email"
                   type="email"

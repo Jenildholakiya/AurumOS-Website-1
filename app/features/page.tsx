@@ -97,7 +97,7 @@ export default function FeaturesPage() {
         >
           {stats.map((stat) => (
             <div key={stat.label} className="space-y-1 text-center">
-              <div className="text-xs font-bold uppercase tracking-tighter text-foreground/40">{stat.label}</div>
+              <div className="text-xs font-bold uppercase tracking-tighter text-foreground/70">{stat.label}</div>
               <div className={`text-3xl font-bold ${stat.color}`}>{stat.val}</div>
             </div>
           ))}
@@ -245,7 +245,7 @@ export default function FeaturesPage() {
           </p>
           <div className="mt-12">
             <div className="mb-2 font-['Dancing_Script',_cursive] text-5xl text-primary">Jenil Dholakiya</div>
-            <div className="text-xs font-bold uppercase tracking-[0.3em] text-foreground/40">Strategic Founder &amp; CTO</div>
+            <div className="text-xs font-bold uppercase tracking-[0.3em] text-foreground/70">Strategic Founder &amp; CTO</div>
           </div>
         </Reveal>
       </section>
@@ -268,7 +268,7 @@ export default function FeaturesPage() {
               <Link href="/pricing">View Pricing</Link>
             </Button>
           </Reveal>
-          <p className="text-sm italic text-foreground/40">
+          <p className="text-sm italic text-foreground/70">
             Join 120+ high-performance showrooms already using AurumOS.
           </p>
         </div>
