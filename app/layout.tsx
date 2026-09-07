@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
 import Navbar from "@/components/layout/Navbar";
@@ -12,7 +13,6 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   display: "swap",
 });
-
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
@@ -21,7 +21,6 @@ const mono = JetBrains_Mono({
 
 // Replace with your production domain.
 export const metadataBase = new URL("https://aurumos.vercel.app");
-
 export const metadata: Metadata = {
   metadataBase,
   title: {
@@ -82,6 +81,15 @@ export default function RootLayout({
           {children}
           <Footer />
         </MotionProvider>
+        <Script id="marker-io" strategy="lazyOnload">
+          {`
+            window.markerConfig = {
+              project: '6a9e9728297b8d263a550cb7', 
+              source: 'snippet'
+            };
+            !function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","clearReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
+          `}
+        </Script>
       </body>
     </html>
   );
