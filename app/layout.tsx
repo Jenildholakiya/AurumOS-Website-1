@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
-<<<<<<< HEAD
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
-import Script from "next/script";
-=======
+import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
->>>>>>> 8be4c4c (Website is Ready)
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
 import Navbar from "@/components/layout/Navbar";
@@ -22,11 +18,12 @@ const clashDisplay = localFont({
   variable: "--font-clash",
   display: "swap",
 });
-<<<<<<< HEAD
+
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-=======
+  display: "swap",
+});
 
 const chillax = localFont({
   src: [
@@ -36,7 +33,6 @@ const chillax = localFont({
     },
   ],
   variable: "--font-chillax",
->>>>>>> 8be4c4c (Website is Ready)
   display: "swap",
 });
 
@@ -92,7 +88,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${clashDisplay.variable} ${chillax.variable} h-full antialiased`}
+      className={`${clashDisplay.variable} ${chillax.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-chillax bg-background text-foreground">
         <AuroraBackground />
@@ -102,15 +98,6 @@ export default function RootLayout({
           {children}
           <Footer />
         </MotionProvider>
-        <Script id="marker-io" strategy="lazyOnload">
-          {`
-            window.markerConfig = {
-              project: '6a9e9728297b8d263a550cb7', 
-              source: 'snippet'
-            };
-            !function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","clearReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
-          `}
-        </Script>
       </body>
     </html>
   );
