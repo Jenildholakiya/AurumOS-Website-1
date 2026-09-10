@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
+<<<<<<< HEAD
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+=======
+import localFont from "next/font/local";
+>>>>>>> 8be4c4c (Website is Ready)
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
 import Navbar from "@/components/layout/Navbar";
@@ -8,14 +12,31 @@ import Footer from "@/components/layout/Footer";
 import AuroraBackground from "@/components/anim/AuroraBackground";
 import ScrollProgress from "@/components/anim/ScrollProgress";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
+const clashDisplay = localFont({
+  src: [
+    {
+      path: "../public/fonts/ClashDisplay-Variable.ttf",
+      style: "normal",
+    },
+  ],
+  variable: "--font-clash",
   display: "swap",
 });
+<<<<<<< HEAD
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+=======
+
+const chillax = localFont({
+  src: [
+    {
+      path: "../public/fonts/Chillax-Variable.ttf",
+      style: "normal",
+    },
+  ],
+  variable: "--font-chillax",
+>>>>>>> 8be4c4c (Website is Ready)
   display: "swap",
 });
 
@@ -71,9 +92,9 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${jakarta.variable} ${mono.variable} h-full antialiased`}
+      className={`${clashDisplay.variable} ${chillax.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
+      <body className="min-h-full flex flex-col font-chillax bg-background text-foreground">
         <AuroraBackground />
         <ScrollProgress />
         <MotionProvider>

@@ -6,20 +6,9 @@ import {
   Truck, ArrowUpRight
 } from 'lucide-react';
 import GemCanvas from "@/components/three/GemCanvas";
-
-// Animation Constants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.3 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-};
+import NumberCounter from "@/components/anim/NumberCounter";
+import StaggeredReveal from "@/components/anim/StaggeredReveal";
+import { DepthLayer, DepthScene } from "@/components/anim/DepthParallax";
 
 export default function WholesalePage() {
   return (
@@ -27,7 +16,11 @@ export default function WholesalePage() {
       
       {/* 1. VISIONARY HERO */}
       <section className="relative pt-40 pb-24 px-6 overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 translate-x-1/4 -z-10" />
+        <DepthScene className="absolute inset-0 -z-10">
+          <DepthLayer depth={-2} className="absolute top-0 right-0 w-1/2 h-full">
+            <div className="bg-primary/5 -skew-x-12 translate-x-1/4 h-full" />
+          </DepthLayer>
+        </DepthScene>
         
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
           <motion.div 
@@ -38,17 +31,17 @@ export default function WholesalePage() {
             <span className="px-4 py-1.5 rounded-full border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest bg-primary/5">
               Enterprise Command Center
             </span>
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9]">
+            <h1 className="font-clash text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9]">
               Wholesale <br /> <span className="text-primary">Command.</span>
             </h1>
             <p className="text-xl text-foreground/80 max-w-lg leading-relaxed">
               Managing 10,000+ SKUs across multiple continents requires more than software. It requires an <strong>Intelligence Core.</strong>
             </p>
             <div className="flex gap-4">
-              <button className="bg-primary text-primary-foreground px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20">
+              <button className="inline-flex items-center justify-center bg-primary text-primary-foreground px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20">
                 Onboard Warehouse
               </button>
-              <button className="border border-border px-8 py-4 rounded-2xl font-bold hover:bg-card transition-all">
+              <button className="inline-flex items-center justify-center border border-border px-8 py-4 rounded-2xl font-bold hover:bg-card transition-all">
                 System Specs
               </button>
             </div>
@@ -93,10 +86,10 @@ export default function WholesalePage() {
       <section className="py-24 px-6 bg-card/50 border-y border-border">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
           {[
-            { label: "Global Sync", val: "< 85ms", desc: "Real-time branch updates", icon: RefreshCw },
-            { label: "Bulk Capacity", val: "100k+", desc: "SKU limit per location", icon: Layers },
-            { label: "API Integrity", val: "99.9%", desc: "Uptime guarantee", icon: Database },
-            { label: "Audit Speed", val: "Instant", desc: "Digital HUID mapping", icon: ShieldCheck },
+            { label: "Global Sync", num: 85, suffix: "ms", desc: "Real-time branch updates", icon: RefreshCw },
+            { label: "Bulk Capacity", num: 100, suffix: "k+", desc: "SKU limit per location", icon: Layers },
+            { label: "API Integrity", num: 99.9, suffix: "%", desc: "Uptime guarantee", icon: Database, decimals: 1 },
+            { label: "Audit Speed", num: 0, suffix: "", desc: "Instant digital HUID mapping", icon: ShieldCheck },
           ].map((stat, i) => (
             <motion.div 
               key={i}
@@ -106,7 +99,9 @@ export default function WholesalePage() {
               className="space-y-3"
             >
               <div className="text-primary"><stat.icon size={24} /></div>
-              <div className="text-3xl font-bold">{stat.val}</div>
+              <div className="text-3xl font-bold">
+                <NumberCounter target={stat.num} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals ?? 0} />
+              </div>
               <div className="text-sm font-bold uppercase tracking-tighter text-foreground/70">{stat.label}</div>
               <p className="text-xs text-foreground/70">{stat.desc}</p>
             </motion.div>
@@ -116,15 +111,16 @@ export default function WholesalePage() {
 
       {/* 3. BENTO MODULES: The Wholesale Pillars */}
       <section className="py-32 px-6 max-w-7xl mx-auto">
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+        <StaggeredReveal
           className="grid grid-cols-1 md:grid-cols-12 gap-6"
+          from="random"
+          stagger={0.08}
+          y={50}
+          rotation={2}
+          scale={0.94}
         >
           {/* Main Module */}
-          <motion.div variants={itemVariants} className="md:col-span-8 p-10 rounded-[32px] border bg-card flex flex-col justify-between group hover:border-primary/50 transition-all">
+          <div className="md:col-span-8 p-10 rounded-[32px] border bg-card flex flex-col justify-between group hover:border-primary/50 transition-all">
             <div className="max-w-md space-y-4">
               <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                 <Box size={32} />
@@ -137,10 +133,10 @@ export default function WholesalePage() {
             <div className="mt-12 flex gap-4 overflow-hidden">
                {[1,2,3,4].map(i => <div key={i} className="size-16 rounded-xl bg-primary/5 border border-primary/10 animate-pulse" />)}
             </div>
-          </motion.div>
+          </div>
 
           {/* Secondary Module */}
-          <motion.div variants={itemVariants} className="md:col-span-4 p-10 rounded-[32px] border bg-foreground text-background flex flex-col justify-between">
+          <div className="md:col-span-4 p-10 rounded-[32px] border bg-foreground text-background flex flex-col justify-between">
             <h3 className="text-2xl font-bold">B2B Trade <br />Portal.</h3>
             <p className="text-background/50 text-sm">
               Give your retailers a private dashboard to browse collections, view real-time gold rates, and place bulk orders without a single phone call.
@@ -152,17 +148,17 @@ export default function WholesalePage() {
             >
               <ArrowUpRight />
             </button>
-          </motion.div>
+          </div>
 
           {/* Logistics Module */}
-          <motion.div variants={itemVariants} className="md:col-span-4 p-10 rounded-[32px] border bg-card hover:border-primary/50 transition-all">
+          <div className="md:col-span-4 p-10 rounded-[32px] border bg-card hover:border-primary/50 transition-all">
             <Truck className="text-primary mb-6" />
             <h3 className="text-xl font-bold mb-2">Branch Transfers</h3>
             <p className="text-sm text-foreground/70">Secure "In-Transit" status tracking for moving gold between showrooms with digital OTP verification.</p>
-          </motion.div>
+          </div>
 
           {/* Analytics Module */}
-          <motion.div variants={itemVariants} className="md:col-span-8 p-10 rounded-[32px] border bg-card hover:border-primary/50 transition-all flex items-center gap-8">
+          <div className="md:col-span-8 p-10 rounded-[32px] border bg-card hover:border-primary/50 transition-all flex items-center gap-8">
             <div className="hidden md:block size-32 rounded-full border-8 border-primary/10 border-t-primary animate-spin" />
             <div className="space-y-2">
                <h3 className="text-xl font-bold">Metal Volatility Guard</h3>
@@ -170,13 +166,13 @@ export default function WholesalePage() {
                  AurumOS automatically re-calculates your total wholesale inventory value based on live LBMA gold rates, protecting your margins against market swings.
                </p>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </StaggeredReveal>
       </section>
 
       {/* 4. THE VIRTUAL VAULT: Security Deep Dive */}
       <section className="py-32 px-6 bg-primary/5 relative">
-        <div className="max-w-5xl mx-auto text-center space-y-12">
+        <div className="max-w-7xl mx-auto text-center space-y-12">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -185,7 +181,7 @@ export default function WholesalePage() {
             <ShieldCheck size={64} className="text-primary" />
           </motion.div>
           <div className="space-y-6">
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">The Virtual Vault.</h2>
+            <h2 className="font-clash text-4xl md:text-6xl font-bold tracking-tight">The Virtual Vault.</h2>
             <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
               Every wholesale transaction is backed by **Temporal Logic.** This means you can "Time Travel" through your ledger to see exact stock states at any second in history.
             </p>
@@ -210,7 +206,7 @@ export default function WholesalePage() {
       <section className="py-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
           <div className="lg:w-1/2 space-y-8">
-            <h2 className="text-5xl font-bold tracking-tight">One Warehouse. <br />Global Visibility.</h2>
+            <h2 className="font-clash text-5xl md:text-7xl font-bold tracking-tight">One Warehouse. <br />Global Visibility.</h2>
             <p className="text-lg text-foreground/70">
               Whether your stock is in a vault in Mumbai, a showroom in Dubai, or a workshop in Surat, AurumOS provides a unified "Single Source of Truth."
             </p>
@@ -224,7 +220,7 @@ export default function WholesalePage() {
             </div>
           </div>
           <div className="lg:w-1/2 relative">
-             <GemCanvas className="mx-auto w-full max-w-md" height={420} />
+             <GemCanvas className="mx-auto w-full max-w-lg" height={420} />
           </div>
         </div>
       </section>
@@ -234,17 +230,17 @@ export default function WholesalePage() {
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="max-w-5xl mx-auto bg-primary p-12 md:p-24 rounded-[60px] text-primary-foreground text-center space-y-8 shadow-2xl shadow-primary/40"
+          className="max-w-7xl mx-auto bg-primary p-12 md:p-24 rounded-[60px] text-primary-foreground text-center space-y-8 shadow-2xl shadow-primary/40"
         >
-          <h2 className="text-4xl md:text-7xl font-bold tracking-tighter">Ready to scale bulk?</h2>
+          <h2 className="font-clash text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">Ready to scale bulk?</h2>
           <p className="text-primary-foreground/70 text-lg max-w-xl mx-auto font-medium">
             Join the elite wholesalers who have eliminated 90% of their operational errors using the AurumOS Command engine.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center pt-4">
-             <button className="bg-background text-foreground px-10 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all">
+             <button className="inline-flex items-center justify-center bg-background text-foreground px-10 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all">
                Book a Technical Walkthrough
              </button>
-             <button className="bg-primary-foreground/10 border border-primary-foreground/20 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-primary-foreground/20 transition-all">
+             <button className="inline-flex items-center justify-center bg-primary-foreground/10 border border-primary-foreground/20 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-primary-foreground/20 transition-all">
                Contact Enterprise Sales
              </button>
           </div>

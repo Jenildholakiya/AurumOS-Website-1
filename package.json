@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "Remove-Item -Recurse -Force .next, node_modules\\.cache -ErrorAction SilentlyContinue; npm cache clean --force 2>$null; Write-Output 'Cleaned .next, node_modules cache, and npm cache'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",

@@ -1,14 +1,17 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, type Variants } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { Menu, X, ArrowRight } from 'lucide-react';
-import Link from 'next/link'; // Import Link
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import MagneticButton from '@/components/ui/MagneticButton';
+import MagneticText from '@/components/ui/MagneticText';
 
 export default function Navbar() {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const next = latest > 20;
@@ -35,6 +38,7 @@ export default function Navbar() {
 
   // Mapping links to actual routes
   const navLinks = [
+    { name: 'Home', href: '/' },
     { name: 'Features', href: '/features' },
     { name: 'Wholesale', href: '/wholesale' },
     { name: 'Retail', href: '/retail' },
@@ -69,33 +73,50 @@ export default function Navbar() {
         </Link>
 
         {/* Links with Line Reveal Animation */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link href={link.href} key={link.name}>
-              <motion.div className="relative cursor-pointer group">
-                <span className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
-                  {link.name}
-                </span>
-                <motion.div
-                  className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100"
-                />
-              </motion.div>
-            </Link>
-          ))}
+        <div className="hidden lg:flex items-center gap-8">
+          {navLinks.map((link) => {
+            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            return (
+              <Link href={link.href} key={link.name}>
+                <motion.div className="relative cursor-pointer group">
+                  <MagneticText
+                    as="span"
+                    hoverColor="oklch(0.50 0.14 25)"
+                    strength={8}
+                    className={`text-sm font-medium ${
+                      isActive ? 'text-primary' : 'text-foreground/80'
+                    }`}
+                  >
+                    {link.name}
+                  </MagneticText>
+                  <motion.div
+                    className={`absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-primary transition-transform duration-300 ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  />
+                </motion.div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           <Link href="/login">
-            <Button variant="ghost" className="rounded-full hidden md:flex cursor-pointer hover:bg-rose-100/50">
+            <MagneticText
+              as="span"
+              hoverColor="oklch(0.50 0.14 25)"
+              strength={6}
+              className="hidden lg:flex text-sm font-medium text-foreground/80 px-4 py-2 rounded-full hover:bg-rose-100/50 cursor-default"
+            >
               Login
-            </Button>
+            </MagneticText>
           </Link>
 
-          <Link href="/get-started" className="hidden md:flex">
-            <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 cursor-pointer shadow-lg shadow-primary/20 transition-transform active:scale-95">
+          <Link href="/get-started" className="hidden lg:flex">
+            <MagneticButton className="inline-flex items-center justify-center rounded-full px-6 py-2 bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 btn-shimmer cursor-pointer">
               Get Started
-            </Button>
+            </MagneticButton>
           </Link>
 
           {/* Mobile menu toggle (wired) */}
@@ -104,7 +125,7 @@ export default function Navbar() {
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
-            className="md:hidden flex items-center justify-center rounded-full p-2 cursor-pointer hover:bg-rose-100"
+            className="lg:hidden flex items-center justify-center rounded-full p-2 cursor-pointer hover:bg-rose-100"
           >
             {mobileOpen ? <X className="size-6 text-foreground" /> : <Menu className="size-6 text-foreground" />}
           </button>
@@ -124,7 +145,7 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={() => setMobileOpen(false)}
-            className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm lg:hidden"
           />
         )}
         {mobileOpen && (
@@ -134,7 +155,7 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.38, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed top-0 right-0 z-[60] flex h-full w-[84%] max-w-sm flex-col bg-white/95 backdrop-blur-xl border-l border-rose-100/60 shadow-2xl md:hidden"
+            className="fixed top-0 right-0 z-[60] flex h-full w-[84%] max-w-sm flex-col bg-white/95 backdrop-blur-xl border-l border-rose-100/60 shadow-2xl lg:hidden"
           >
             {/* Header: brand + close */}
             <div className="flex items-center justify-between px-6 pt-7 pb-5 border-b border-rose-100/50">
@@ -162,31 +183,50 @@ export default function Navbar() {
               animate="show"
               className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5"
             >
-              {navLinks.map((link) => (
-                <motion.div key={link.name} variants={drawerItem}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-medium text-foreground/80 transition-colors hover:bg-primary/5 hover:text-primary"
-                  >
-                    <span>{link.name}</span>
-                    <ArrowRight className="size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
-                  </Link>
-                </motion.div>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+                return (
+                  <motion.div key={link.name} variants={drawerItem}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-foreground/80 hover:bg-primary/5 hover:text-primary'
+                      }`}
+                    >
+                      <MagneticText
+                        as="span"
+                        hoverColor="oklch(0.50 0.14 25)"
+                        strength={6}
+                        className="cursor-default"
+                      >
+                        {link.name}
+                      </MagneticText>
+                      <ArrowRight className="size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </motion.nav>
 
             {/* Footer actions */}
             <div className="flex flex-col gap-3 border-t border-rose-100/50 px-6 py-5">
               <Link href="/login" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full rounded-full cursor-pointer hover:bg-rose-100/50">
+                <MagneticText
+                  as="span"
+                  hoverColor="oklch(0.50 0.14 25)"
+                  strength={6}
+                  className="flex w-full items-center justify-center rounded-full px-4 py-3 text-base font-medium text-foreground/80 hover:bg-rose-100/50 cursor-default"
+                >
                   Login
-                </Button>
+                </MagneticText>
               </Link>
               <Link href="/get-started" onClick={() => setMobileOpen(false)}>
-                <Button className="w-full rounded-full bg-primary px-6 hover:bg-primary/90 cursor-pointer shadow-lg shadow-primary/20 active:scale-95">
+                <MagneticButton className="inline-flex items-center justify-center w-full rounded-full bg-primary px-6 py-3 text-base font-bold text-primary-foreground shadow-lg shadow-primary/20 btn-shimmer cursor-pointer">
                   Get Started
-                </Button>
+                </MagneticButton>
               </Link>
               <p className="mt-1 text-center text-xs text-foreground/70">
                 Enterprise jewellery ERP

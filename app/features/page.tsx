@@ -69,7 +69,7 @@ export default function FeaturesPage() {
 
         <h1
           data-feat-title
-          className="mx-auto mt-8 mb-6 max-w-4xl text-5xl font-bold tracking-tight md:text-8xl"
+          className="font-clash mx-auto mt-8 mb-6 max-w-4xl text-5xl font-bold tracking-tight md:text-8xl"
         >
           The Operating System <br /> for <span className="italic text-primary">Excellence.</span>
         </h1>
@@ -110,7 +110,7 @@ export default function FeaturesPage() {
           <SplitHeading
             as="h2"
             text="Built for Scale. Calibrated for Precision."
-            className="text-4xl font-bold tracking-tight md:text-5xl"
+            className="font-clash text-4xl font-bold tracking-tight md:text-5xl"
           />
           <Reveal as="p" y={20} className="text-foreground/70">
             Every module is engineered to eliminate the friction of manual administration.
@@ -151,7 +151,7 @@ export default function FeaturesPage() {
             <SplitHeading
               as="h2"
               text="The Hardware Ecosystem."
-              className="text-4xl font-bold tracking-tight md:text-6xl"
+              className="font-clash text-4xl font-bold tracking-tight md:text-6xl"
             />
             <p className="text-lg leading-relaxed text-foreground/70">
               AurumOS doesn&apos;t just sit in the cloud. It breathes with your showroom —
@@ -204,7 +204,7 @@ export default function FeaturesPage() {
               <SplitHeading
                 as="h2"
                 text="Your Data. Your Sovereignty."
-                className="text-4xl font-bold tracking-tighter text-background md:text-6xl"
+                className="font-clash text-4xl font-bold tracking-tighter text-background md:text-6xl"
               />
               <p className="text-lg text-background/60">
                 In the jewellery trade, privacy is as valuable as the inventory. AurumOS uses a
@@ -256,7 +256,7 @@ export default function FeaturesPage() {
           <SplitHeading
             as="h2"
             text="Calibrate your Business today."
-            className="text-5xl font-bold tracking-tight md:text-7xl"
+            className="font-clash text-5xl font-bold tracking-tight md:text-7xl"
           />
           <Reveal as="div" y={20} className="flex flex-col justify-center gap-4 md:flex-row">
             <Button asChild size="lg" className="h-12 rounded-2xl px-8 text-lg shadow-xl shadow-primary/20">

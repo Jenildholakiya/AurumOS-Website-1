@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-jakarta), sans-serif;
+  --font-sans: var(--font-chillax), sans-serif;
   --font-mono: var(--font-mono), monospace;
+  --font-clash: var(--font-clash), sans-serif;
+  --font-chillax: var(--font-chillax), sans-serif;
 
   /* Rose Gold Theme Variables */
   --color-background: oklch(0.98 0.015 45);
@@ -38,6 +40,186 @@
   button, a, [role="button"], .cursor-pointer {
     cursor: pointer !important;
   }
+}
+
+/* Documentation prose styles */
+.prose-aurumos h2 {
+  @apply text-2xl font-bold tracking-tight text-foreground mt-10 mb-4 pb-3 border-b border-border;
+}
+.prose-aurumos h3 {
+  @apply text-xl font-bold text-foreground mt-8 mb-3;
+}
+.prose-aurumos h4 {
+  @apply text-lg font-bold text-foreground mt-6 mb-2;
+}
+.prose-aurumos p {
+  @apply text-foreground/80 leading-relaxed;
+}
+.prose-aurumos ul, .prose-aurumos ol {
+  @apply text-foreground/80;
+}
+.prose-aurumos code {
+  @apply rounded bg-primary/10 px-1.5 py-0.5 text-xs font-mono text-primary;
+}
+.prose-aurumos pre code {
+  @apply bg-transparent px-0 py-0 text-foreground/80;
+}
+.prose-aurumos table {
+  @apply w-full text-sm;
+}
+.prose-aurumos th {
+  @apply px-4 py-2.5 text-left font-bold text-foreground bg-foreground/5 border-b border-border;
+}
+.prose-aurumos td {
+  @apply px-4 py-2.5 border-b border-border/40 text-foreground/70;
+}
+.prose-aurumos strong {
+  @apply font-bold text-foreground;
+}
+
+/* Docs sidebar custom scrollbar */
+.scrollbar-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.85 0.01 25) transparent;
+}
+.scrollbar-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-sidebar::-webkit-scrollbar-thumb {
+  background-color: oklch(0.85 0.01 25);
+  border-radius: 9999px;
+}
+.scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0.75 0.03 25);
+}
+
+/* ─── Button Hover Effects ─── */
+
+/* 1. Shimmer sweep — light beam glides across on hover */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.25) 55%,
+    transparent 60%
+  );
+  transform: translateX(-150%);
+  transition: none;
+  z-index: 1;
+  pointer-events: none;
+}
+.btn-shimmer:hover::before {
+  transform: translateX(150%);
+  transition: transform 0.7s ease;
+}
+
+/* 2. Gradient shift — background gradient animates on hover */
+.btn-gradient {
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  transition: background-position 0.5s ease, box-shadow 0.4s ease, transform 0.3s ease;
+}
+.btn-gradient:hover {
+  background-position: 100% 50%;
+}
+
+/* 3. Glow pulse — soft expanding shadow ring on hover */
+.btn-glow {
+  transition: box-shadow 0.4s ease, transform 0.3s ease;
+}
+.btn-glow:hover {
+  box-shadow:
+    0 0 20px oklch(0.50 0.14 25 / 0.35),
+    0 0 60px oklch(0.50 0.14 25 / 0.15),
+    0 8px 30px oklch(0.50 0.14 25 / 0.2);
+}
+
+/* 4. Border draw — border draws itself on hover (for outline buttons) */
+.btn-border-draw {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.btn-border-draw::before,
+.btn-border-draw::after {
+  content: '';
+  position: absolute;
+  background: var(--color-primary);
+  transition: transform 0.4s ease;
+  z-index: -1;
+}
+/* Top & bottom borders */
+.btn-border-draw::before {
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.btn-border-draw::after {
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: right;
+}
+.btn-border-draw:hover::before,
+.btn-border-draw:hover::after {
+  transform: scaleX(1);
+}
+
+/* 5. Arrow slide — icon slides in from right on hover */
+.btn-arrow-slide {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-arrow-slide .btn-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.7;
+}
+.btn-arrow-slide:hover .btn-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* 6. Scale ring — ring expands outward on hover */
+.btn-scale-ring {
+  position: relative;
+  z-index: 1;
+}
+.btn-scale-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid var(--color-primary);
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.btn-scale-ring:hover::after {
+  opacity: 0.4;
+  transform: scale(1);
+}
+
+/* Magnetic button wrapper */
+.magnetic-btn {
+  display: inline-flex;
+  will-change: transform;
 }
 
 /* Global safety net: strip motion for users who request it. This also reduces

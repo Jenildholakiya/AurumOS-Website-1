@@ -1,14 +1,30 @@
 'use client';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Import your specific icons
 import { faLinkedin, faTwitter, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 const footerLinks = [
-  { title: "Product", links: ["Wholesale", "Retail POS", "HUID Compliance", "Analytics"] },
-  { title: "Company", links: ["Founder Vision", "Data Sovereignty", "Our Ecosystem", "VertexWeb"] },
-  { title: "Support", links: ["24/7 Help", "System Status", "Documentation", "Contact"] }
+  { title: "Product", links: [
+    { name: "Wholesale", href: "/wholesale" },
+    { name: "Retail POS", href: "/retail" },
+    { name: "HUID Compliance", href: "/features" },
+    { name: "Analytics", href: "/features" },
+  ]},
+  { title: "Company", links: [
+    { name: "Founder Vision", href: "/" },
+    { name: "Data Sovereignty", href: "/security" },
+    { name: "Our Ecosystem", href: "/" },
+    { name: "VertexWeb", href: "/" },
+  ]},
+  { title: "Support", links: [
+    { name: "24/7 Help", href: "/" },
+    { name: "System Status", href: "/" },
+    { name: "Documentation", href: "/docs" },
+    { name: "Contact", href: "/" },
+  ]},
 ];
 
 export default function Footer() {
@@ -34,13 +50,23 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {footerLinks.map((group, idx) => (
+          {footerLinks.map((group) => (
             <motion.div key={group.title} className="space-y-6">
               <h3 className="font-bold uppercase tracking-widest text-xs text-foreground/70">{group.title}</h3>
               <ul className="space-y-4">
                 {group.links.map((link) => (
-                  <motion.li key={link} whileHover={{ x: 5, color: "var(--primary)" }} className="text-foreground/80 cursor-pointer">
-                    {link}
+                  <motion.li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-foreground/80 cursor-pointer inline-block transition-colors duration-200 hover:text-primary"
+                    >
+                      <motion.span
+                        whileHover={{ x: 5 }}
+                        className="inline-block"
+                      >
+                        {link.name}
+                      </motion.span>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>

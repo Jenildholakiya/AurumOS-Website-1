@@ -13,7 +13,7 @@ const securityFeatures = [
 export default function SecurityBanner() {
   return (
     <section className="px-6 py-24">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-r from-primary/10 to-transparent p-12">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-r from-primary/10 to-transparent p-12 md:p-16 lg:p-20">
         <div className="relative z-10">
           <SplitHeading
             as="h2"

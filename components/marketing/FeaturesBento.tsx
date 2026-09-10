@@ -1,7 +1,11 @@
 'use client';
+import { useRef } from 'react';
 import { BarChart3, ShieldCheck, Warehouse, Zap, Users, ReceiptText } from 'lucide-react';
 import ScrollStage from '@/components/anim/ScrollStage';
 import TiltCard from '@/components/anim/TiltCard';
+import { gsap, useGSAP } from '@/components/anim/gsap/register';
+import Reveal from '@/components/anim/Reveal';
+import SplitHeading from '@/components/anim/SplitHeading';
 
 const features = [
   {
@@ -37,6 +41,28 @@ const features = [
 ];
 
 export default function FeaturesGrid() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!gridRef.current) return;
+      const cards = gridRef.current.querySelectorAll('[data-feature-card]');
+      gsap.from(cards, {
+        y: 60,
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: 'top 80%',
+          once: true,
+        },
+      });
+    },
+    { scope: gridRef },
+  );
+
   return (
     <ScrollStage
       id="features-home"
@@ -44,19 +70,23 @@ export default function FeaturesGrid() {
     >
       <div className="mx-auto w-full max-w-7xl">
         <div className="mb-16 text-center">
-          <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
-            One Platform. Every Facet of Your Trade.
-          </h2>
-          <p className="text-lg text-foreground/70">
-            From the vault to the counter, AurumOS orchestrates your entire operation.
-          </p>
+          <Reveal as="div" y={30}>
+            <SplitHeading
+              as="h2"
+              text="One Platform. Every Facet of Your Trade."
+              className="mb-4 text-4xl font-bold tracking-tight md:text-5xl"
+            />
+            <p className="text-lg text-foreground/70">
+              From the vault to the counter, AurumOS orchestrates your entire operation.
+            </p>
+          </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div ref={gridRef} className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div key={feature.title}>
+              <div key={feature.title} data-feature-card>
                 <TiltCard tilt={7} className="rounded-3xl">
                   <div className="group relative h-full overflow-hidden rounded-3xl border border-border/60 bg-white/70 p-8 shadow-sm backdrop-blur-sm transition-shadow duration-300 hover:shadow-2xl hover:shadow-primary/10 cursor-pointer">
                     {/* Diagonal light sheen that sweeps across on hover */}

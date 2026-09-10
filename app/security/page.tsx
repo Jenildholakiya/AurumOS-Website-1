@@ -5,6 +5,9 @@ import {
   ShieldAlert, Cpu, Globe, Database, Key, Activity, Check
 } from 'lucide-react';
 import GemCanvas from "@/components/three/GemCanvas";
+import NumberCounter from "@/components/anim/NumberCounter";
+import StaggeredReveal from "@/components/anim/StaggeredReveal";
+import { DepthLayer, DepthScene } from "@/components/anim/DepthParallax";
 
 // Animation Variants
 const fadeInUp = {
@@ -14,26 +17,25 @@ const fadeInUp = {
   transition: { duration: 0.7, ease: "easeOut" as const }
 };
 
-const staggerContainer = {
-  initial: {},
-  whileInView: { transition: { staggerChildren: 0.1 } }
-};
-
 export default function SecurityPage() {
   return (
     <main className="min-h-screen text-foreground overflow-x-hidden">
       
       {/* 1. HERO: The Digital Vault */}
       <section className="relative pt-40 pb-24 px-6 text-center overflow-hidden">
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-            opacity: [0.1, 0.2, 0.1] 
-          }}
-          transition={{ duration: 15, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 size-[600px] bg-primary/10 rounded-full blur-[120px] -z-10" 
-        />
+        <DepthScene className="absolute inset-0 -z-10">
+          <DepthLayer depth={-1.5}>
+            <motion.div 
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 90, 0],
+                opacity: [0.1, 0.2, 0.1] 
+              }}
+              transition={{ duration: 15, repeat: Infinity }}
+              className="absolute top-0 left-1/2 -translate-x-1/2 size-[600px] bg-primary/10 rounded-full blur-[120px]" 
+            />
+          </DepthLayer>
+        </DepthScene>
         
         <motion.div
           initial={{ scale: 0 }}
@@ -46,7 +48,7 @@ export default function SecurityPage() {
         
         <motion.h1 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          className="text-6xl md:text-8xl font-bold tracking-tighter mb-8"
+          className="font-clash text-6xl md:text-8xl font-bold tracking-tighter mb-8"
         >
           Digital <span className="text-primary italic">Sovereignty.</span>
         </motion.h1>
@@ -60,8 +62,8 @@ export default function SecurityPage() {
       </section>
 
       {/* 1B. INTERACTIVE 3D CORE */}
-      <section className="pb-16 px-6 max-w-3xl mx-auto">
-        <GemCanvas className="mx-auto w-full max-w-md" height={360} />
+      <section className="pb-16 px-6 max-w-5xl mx-auto">
+        <GemCanvas className="mx-auto w-full max-w-lg" height={360} />
       </section>
 
       {/* 2. REAL-TIME THREAT MONITORING TICKER */}
@@ -69,7 +71,7 @@ export default function SecurityPage() {
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-12">
           {[
             { label: "Encryption", val: "AES-256", icon: Lock },
-            { label: "Uptime", val: "99.99%", icon: Activity },
+            { label: "Uptime", num: 99.99, suffix: "%", decimals: 2, icon: Activity },
             { label: "Architecture", val: "Zero-Knowledge", icon: EyeOff },
             { label: "Compliance", val: "BIS / HUID", icon: Check },
           ].map((item, i) => (
@@ -77,7 +79,13 @@ export default function SecurityPage() {
               <item.icon size={18} className="text-primary" />
               <div>
                 <div className="text-[10px] font-bold uppercase tracking-widest text-foreground/70 leading-none">{item.label}</div>
-                <div className="text-lg font-bold">{item.val}</div>
+                <div className="text-lg font-bold">
+                  {'num' in item && item.num !== undefined ? (
+                    <NumberCounter target={item.num} suffix={item.suffix} decimals={item.decimals ?? 0} />
+                  ) : (
+                    item.val
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -86,9 +94,13 @@ export default function SecurityPage() {
 
       {/* 3. THE SECURITY PILLARS: Bento Stagger */}
       <section className="py-32 px-6 max-w-7xl mx-auto">
-        <motion.div 
-          variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true }}
+        <StaggeredReveal
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          from="random"
+          stagger={0.08}
+          y={50}
+          rotation={2}
+          scale={0.94}
         >
           {[
             { icon: Key, title: "Owner-Only Keys", desc: "Decryption keys are generated on your device. We cannot see your data." },
@@ -96,8 +108,8 @@ export default function SecurityPage() {
             { icon: Globe, title: "Geographic Failover", desc: "Automatic data mirroring across 3 global secure regions." },
             { icon: ShieldAlert, title: "Instant Kill-Switch", desc: "Remote session termination and device-level locking." },
           ].map((pillar, i) => (
-            <motion.div 
-              key={i} variants={fadeInUp} whileHover={{ y: -10 }}
+            <div 
+              key={i}
               className="p-8 rounded-[32px] border bg-card hover:border-primary/40 transition-all group"
             >
               <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
@@ -105,16 +117,16 @@ export default function SecurityPage() {
               </div>
               <h3 className="text-xl font-bold mb-3">{pillar.title}</h3>
               <p className="text-sm text-foreground/70 leading-relaxed">{pillar.desc}</p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </StaggeredReveal>
       </section>
 
       {/* 4. TECHNICAL DEEP-DIVE: Immutability Engine */}
       <section className="py-32 px-6 bg-primary/5">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
           <motion.div {...fadeInUp} className="space-y-8">
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight">The Ledger <br /><span className="text-primary">Immutability</span> Engine.</h2>
+            <h2 className="font-clash text-5xl md:text-7xl font-bold tracking-tight">The Ledger <br /><span className="text-primary">Immutability</span> Engine.</h2>
             <p className="text-lg text-foreground/70 leading-relaxed">
               Every inventory adjustment, hallmark record, and weight calibration is cryptographically hashed. In AurumOS, <strong>history cannot be deleted.</strong> 
             </p>
@@ -161,8 +173,8 @@ export default function SecurityPage() {
 
       {/* 5. HARDWARE-LEVEL SECURITY: Device Locking */}
       <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto text-center space-y-12">
-          <motion.h2 {...fadeInUp} className="text-4xl md:text-6xl font-bold tracking-tight">Showroom Hardware <br />Locking.</motion.h2>
+        <div className="max-w-6xl mx-auto text-center space-y-12">
+          <motion.h2 {...fadeInUp} className="font-clash text-4xl md:text-6xl font-bold tracking-tight">Showroom Hardware <br />Locking.</motion.h2>
           <div className="grid md:grid-cols-2 gap-8 text-left">
             <motion.div {...fadeInUp} className="p-10 rounded-[40px] border bg-card space-y-6">
               <Cpu className="text-primary" size={40} />
@@ -186,7 +198,7 @@ export default function SecurityPage() {
       <section className="py-32 px-6 bg-foreground text-background overflow-hidden relative">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">Engineered for <br />Compliance.</h2>
+            <h2 className="font-clash text-4xl md:text-6xl font-bold tracking-tight mb-8">Engineered for <br />Compliance.</h2>
             <div className="space-y-6">
               {[
                 { t: "BIS / HUID Standards", d: "Built-in workflows for mandatory hallmarking compliance." },
@@ -225,11 +237,11 @@ export default function SecurityPage() {
       {/* 7. FINAL TRUST ANCHOR */}
       <section className="py-32 px-6 max-w-4xl mx-auto text-center space-y-12">
         <motion.div {...fadeInUp}>
-          <p className="text-3xl md:text-4xl font-bold leading-tight">
+          <p className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
             "Your word is your currency. My word is your digital security. I personally guarantee the integrity of every byte stored in the AurumOS ecosystem."
           </p>
           <div className="mt-12">
-            <div className="font-['Dancing_Script',_cursive] text-6xl text-primary mb-2">Jenil Dholakiya</div>
+            <div className="font-['Dancing_Script',_cursive] text-6xl lg:text-7xl text-primary mb-2">Jenil Dholakiya</div>
             <div className="text-xs uppercase tracking-[0.4em] font-bold text-foreground/70">Strategic Founder & CTO</div>
           </div>
         </motion.div>

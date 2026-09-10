@@ -124,7 +124,7 @@ export default function PricingPage() {
           className="absolute top-0 left-1/2 -translate-x-1/2 size-[500px] bg-primary/20 rounded-full blur-[100px] -z-10" 
         />
         
-        <motion.h1 {...fadeInUp} className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
+        <motion.h1 {...fadeInUp} className="font-clash text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
           Investment in <br /><span className="text-primary italic">Absolute Integrity.</span>
         </motion.h1>
 
@@ -188,8 +188,8 @@ export default function PricingPage() {
 
       {/* 3. FEATURE COMPARISON MATRIX (Animated Grid) */}
       <section className="py-32 bg-primary/5 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.h2 {...fadeInUp} className="text-4xl font-bold text-center mb-20 tracking-tight">Technical Capability <span className="text-primary">Matrix</span></motion.h2>
+        <div className="max-w-6xl mx-auto">
+          <motion.h2 {...fadeInUp} className="font-clash text-4xl font-bold text-center mb-20 tracking-tight">Technical Capability <span className="text-primary">Matrix</span></motion.h2>
           <div className="rounded-[40px] border border-border bg-background overflow-hidden shadow-xl">
              <div className="grid grid-cols-4 p-8 border-b border-border bg-card/50 text-xs font-bold uppercase tracking-widest text-foreground/70">
                 <div className="col-span-1">Feature</div>
@@ -215,7 +215,7 @@ export default function PricingPage() {
       {/* 4. IMPLEMENTATION ROADMAP (The 3-Step Process) */}
       <section className="py-40 px-6 max-w-7xl mx-auto">
          <div className="text-center mb-20 space-y-4">
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Onboarding in Weeks. <br />Not Months.</h2>
+            <h2 className="font-clash text-4xl md:text-6xl font-bold tracking-tight">Onboarding in Weeks. <br />Not Months.</h2>
             <p className="text-foreground/70 text-xl">Our strategic engineers handle the heavy lifting.</p>
          </div>
          <div className="grid md:grid-cols-3 gap-12 relative">
@@ -239,7 +239,7 @@ export default function PricingPage() {
       <section className="py-32 px-6 bg-foreground text-background overflow-hidden relative">
          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
             <motion.div {...fadeInUp} className="space-y-8">
-               <h2 className="text-4xl md:text-7xl font-bold tracking-tight leading-[0.9]">Global Cloud <br />Redundancy.</h2>
+               <h2 className="font-clash text-4xl md:text-7xl font-bold tracking-tight leading-[0.9]">Global Cloud <br />Redundancy.</h2>
                <p className="text-background/60 text-lg">
                  Your business cannot stop. AurumOS operates on a high-availability infrastructure with automated daily backups and 100ms global synchronization.
                </p>
@@ -257,14 +257,14 @@ export default function PricingPage() {
                </div>
             </motion.div>
             <div className="relative">
-               <GemCanvas className="mx-auto w-full max-w-md" height={420} />
+               <GemCanvas className="mx-auto w-full max-w-lg" height={420} />
             </div>
          </div>
       </section>
 
       {/* 6. TECHNICAL FAQ (Simplified) */}
-      <section className="py-40 px-6 max-w-4xl mx-auto text-center space-y-12">
-        <h2 className="text-4xl font-bold">Calibration FAQs</h2>
+      <section className="py-40 px-6 max-w-5xl mx-auto text-center space-y-12">
+        <h2 className="text-4xl md:text-5xl font-bold">Calibration FAQs</h2>
         <div className="space-y-4">
           {[
             { q: "Is hardware included?", a: "IoT Scale integration is standard in Enterprise. Hardware units are sold separately." },
@@ -286,7 +286,7 @@ export default function PricingPage() {
           whileInView={{ opacity: 1, scale: 1 }}
           className="max-w-7xl mx-auto bg-primary p-12 md:p-24 rounded-[60px] text-primary-foreground text-center space-y-8 shadow-2xl shadow-primary/40 relative overflow-hidden"
         >
-           <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">Ready to <span className="italic">Calibrate?</span></h2>
+           <h2 className="font-clash text-5xl md:text-8xl font-bold tracking-tighter">Ready to <span className="italic">Calibrate?</span></h2>
            <p className="text-primary-foreground/70 text-xl font-medium max-w-xl mx-auto">
              Join 120+ showrooms scaling with AurumOS. Stop managing data, start managing revenue.
            </p>

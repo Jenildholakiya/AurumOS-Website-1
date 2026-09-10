@@ -6,6 +6,7 @@ import {
   Briefcase, TrendingUp, Gem, Monitor, History, Cpu, Check
 } from 'lucide-react';
 import GemCanvas from "@/components/three/GemCanvas";
+import NumberCounter from "@/components/anim/NumberCounter";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -19,10 +20,10 @@ export default function RetailPage() {
     <main className="min-h-screen text-foreground overflow-x-hidden">
       
       {/* 1. HERO: The Showroom Experience */}
-      <section className="pt-40 pb-24 px-6 text-center">
+      <section className="pt-40 pb-24 px-6 text-center max-w-7xl mx-auto">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          className="text-6xl md:text-8xl font-bold tracking-tighter mb-8"
+          className="font-clash text-6xl md:text-8xl font-bold tracking-tighter mb-8"
         >
           Showroom <span className="text-primary italic">Elegance.</span>
         </motion.h1>
@@ -35,22 +36,24 @@ export default function RetailPage() {
       </section>
 
       {/* 1B. INTERACTIVE 3D CORE */}
-      <section className="pb-16 px-6 max-w-3xl mx-auto">
-        <GemCanvas className="mx-auto w-full max-w-md" height={360} />
+      <section className="pb-16 px-6 max-w-5xl mx-auto">
+        <GemCanvas className="mx-auto w-full max-w-lg" height={360} />
       </section>
 
       {/* 2. LIVE OPERATIONAL TICKER (New Section) */}
       <section className="py-12 border-y border-border bg-primary/5">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { label: "Orders/Day", val: "450+" },
-            { label: "Billing Time", val: "< 15s" },
-            { label: "HUID Accuracy", val: "100%" },
-            { label: "Showroom Uptime", val: "99.99%" },
+            { label: "Orders/Day", num: 450, suffix: "+" },
+            { label: "Billing Time", num: 15, suffix: "s", prefix: "< " },
+            { label: "HUID Accuracy", num: 100, suffix: "%" },
+            { label: "Showroom Uptime", num: 99.99, suffix: "%", decimals: 2 },
           ].map((stat, i) => (
             <motion.div key={i} {...fadeInUp} className="text-center">
               <div className="text-sm font-bold uppercase tracking-widest text-foreground/70">{stat.label}</div>
-              <div className="text-3xl font-bold text-primary">{stat.val}</div>
+              <div className="text-3xl font-bold text-primary">
+                <NumberCounter target={stat.num} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals ?? 0} />
+              </div>
             </motion.div>
           ))}
         </div>
@@ -59,7 +62,7 @@ export default function RetailPage() {
       {/* 3. POS INTERFACE */}
       <section className="py-32 px-6 max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
         <motion.div {...fadeInUp} className="space-y-8">
-          <h2 className="text-5xl font-bold tracking-tight">Billing that feels like Art.</h2>
+          <h2 className="font-clash text-5xl md:text-6xl font-bold tracking-tight">Billing that feels like Art.</h2>
           <p className="text-foreground/70 leading-relaxed text-lg">
             Our Retail POS is designed for high-traffic days. With one-tap HUID scanning and instant gold-rate adjustment, your staff can finish an order in seconds.
           </p>
@@ -81,7 +84,7 @@ export default function RetailPage() {
                 <span>Gold Necklace #882</span>
                 <span className="font-bold text-xl">₹1,24,000</span>
               </div>
-              <button className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold hover:scale-95 transition-all">Finalize Sale</button>
+              <button className="inline-flex items-center justify-center w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold hover:scale-95 transition-all">Finalize Sale</button>
            </div>
         </motion.div>
       </section>
@@ -91,7 +94,7 @@ export default function RetailPage() {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
            <motion.div {...fadeInUp} className="space-y-6">
               <ShieldCheck className="text-primary" size={48} />
-              <h2 className="text-4xl font-bold">Regulatory Auto-Pilot</h2>
+              <h2 className="font-clash text-4xl md:text-5xl font-bold">Regulatory Auto-Pilot</h2>
               <p className="text-foreground/70">Compliance isn't optional. AurumOS automatically maps HUID numbers to your invoices in real-time. If a hallmark is missing, the system locks the transaction—keeping you audit-proof forever.</p>
            </motion.div>
            <div className="bg-background p-8 rounded-3xl border font-mono text-sm space-y-4">
@@ -106,7 +109,7 @@ export default function RetailPage() {
       {/* 5. GOLD SAVINGS SCHEME (New Section) */}
       <section className="py-32 px-6 max-w-7xl mx-auto">
          <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl font-bold">Gold Savings Engine</h2>
+            <h2 className="font-clash text-4xl md:text-5xl font-bold">Gold Savings Engine</h2>
             <p className="text-foreground/70">Automate your most complex monthly schemes.</p>
          </motion.div>
          <div className="grid md:grid-cols-3 gap-8">
@@ -128,7 +131,7 @@ export default function RetailPage() {
       <section className="py-32 px-6 bg-primary/5">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Empower Your Sales Force</h2>
+            <h2 className="font-clash text-4xl md:text-5xl font-bold mb-4">Empower Your Sales Force</h2>
             <p className="text-foreground/70">Turn every employee into a top-performer with real-time KPI tracking.</p>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -149,9 +152,9 @@ export default function RetailPage() {
 
       {/* 7. CTA */}
       <section className="py-24 px-6 text-center">
-        <motion.div {...fadeInUp} className="max-w-3xl mx-auto p-12 bg-foreground text-background rounded-[40px]">
-          <h2 className="text-5xl font-bold mb-8">Modernize your Showroom.</h2>
-          <button className="bg-primary text-primary-foreground px-12 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all">
+        <motion.div {...fadeInUp} className="max-w-5xl mx-auto p-12 bg-foreground text-background rounded-[40px]">
+          <h2 className="font-clash text-5xl md:text-6xl font-bold mb-8">Modernize your Showroom.</h2>
+          <button className="inline-flex items-center justify-center bg-primary text-primary-foreground px-12 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all">
             Request Showroom Demo
           </button>
         </motion.div>

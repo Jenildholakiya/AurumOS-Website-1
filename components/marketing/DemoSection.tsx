@@ -1,9 +1,13 @@
 'use client';
-import React from 'react';
+import React, { useRef } from 'react';
 import { CheckCircle2, ArrowRight, Headphones, ShieldCheck } from 'lucide-react';
 import ScrollStage from '@/components/anim/ScrollStage';
+import { gsap, useGSAP } from '@/components/anim/gsap/register';
+import SplitHeading from '@/components/anim/SplitHeading';
+import Reveal from '@/components/anim/Reveal';
 
 export default function DemoSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = React.useState({ firstName: '', lastName: '', email: '', phone: '', message: '' });
   const [status, setStatus] = React.useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = React.useState('');
@@ -13,6 +17,27 @@ export default function DemoSection() {
     const p = new URLSearchParams(window.location.search).get('plan');
     if (p) setPlan(p);
   }, []);
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+      const formCard = sectionRef.current.querySelector('[data-form-card]');
+      if (formCard) {
+        gsap.from(formCard, {
+          x: 60,
+          autoAlpha: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: formCard,
+            start: 'top 80%',
+            once: true,
+          },
+        });
+      }
+    },
+    { scope: sectionRef },
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -49,19 +74,21 @@ export default function DemoSection() {
       id="contact"
       className="flex items-center px-6 py-24 overflow-hidden"
     >
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-2">
+      <div ref={sectionRef} className="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-2">
         {/* Left: Text & Trust Factors */}
         <div className="space-y-8">
-          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
-            Ready to Calibrate Your Business?
-          </h2>
+          <SplitHeading
+            as="h2"
+            text="Ready to Calibrate Your Business?"
+            className="font-clash text-4xl font-bold tracking-tight md:text-5xl"
+          />
 
-          <p className="max-w-lg text-lg leading-relaxed text-foreground/70">
+          <Reveal as="p" y={20} delay={0.1} className="max-w-xl text-lg leading-relaxed text-foreground/70">
             Stop juggling spreadsheets and siloed data. See how AurumOS unifies your wholesale and
             retail operations into a single, high-performance ecosystem.
-          </p>
+          </Reveal>
 
-          <ul className="space-y-4">
+          <Reveal as="ul" y={20} delay={0.2} className="space-y-4">
             {benefits.map((item) => (
               <li
                 key={item}
@@ -71,20 +98,21 @@ export default function DemoSection() {
                 {item}
               </li>
             ))}
-          </ul>
+          </Reveal>
 
-          <div className="flex gap-6 border-t border-border pt-6 mt-8">
+          <Reveal as="div" y={20} delay={0.3} className="flex gap-6 border-t border-border pt-6 mt-8">
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground/70">
               <Headphones className="size-5 text-primary" /> 24/7 Support
             </div>
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground/70">
               <ShieldCheck className="size-5 text-primary" /> Enterprise Security
             </div>
-          </div>
+          </Reveal>
         </div>
 
         {/* Right: Form Card */}
         <div
+          data-form-card
           className="rounded-3xl border border-border bg-white/70 p-8 shadow-xl backdrop-blur-sm md:p-10"
         >
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -131,15 +159,15 @@ export default function DemoSection() {
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary p-4 font-bold text-primary-foreground transition-all hover:bg-primary/90 cursor-pointer disabled:opacity-60 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary p-4 font-bold text-primary-foreground cursor-pointer disabled:opacity-60 btn-shimmer btn-glow active:scale-[0.98]"
             >
-              {status === 'sending' ? 'Sending…' : 'Request Private Demo'}{' '}
+              {status === 'sending' ? 'Sending...' : 'Request Private Demo'}{' '}
               <ArrowRight className="size-5" />
             </button>
 
             {status === 'success' && (
               <p className="text-center text-sm font-semibold text-emerald-600">
-                Thanks! Your request has been sent — we&apos;ll be in touch shortly.
+                Thanks! Your request has been sent.
               </p>
             )}
             {status === 'error' && (
