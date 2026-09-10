@@ -86,10 +86,10 @@ export default function WholesalePage() {
       <section className="py-24 px-6 bg-card/50 border-y border-border">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
           {[
-            { label: "Global Sync", num: 85, suffix: "ms", desc: "Real-time branch updates", icon: RefreshCw },
-            { label: "Bulk Capacity", num: 100, suffix: "k+", desc: "SKU limit per location", icon: Layers },
-            { label: "API Integrity", num: 99.9, suffix: "%", desc: "Uptime guarantee", icon: Database, decimals: 1 },
-            { label: "Audit Speed", num: 0, suffix: "", desc: "Instant digital HUID mapping", icon: ShieldCheck },
+            { label: "Global Sync", num: 85, prefix: "", suffix: "ms", desc: "Real-time branch updates", icon: RefreshCw },
+            { label: "Bulk Capacity", num: 100, prefix: "", suffix: "k+", desc: "SKU limit per location", icon: Layers },
+            { label: "API Integrity", num: 99.9, prefix: "", suffix: "%", desc: "Uptime guarantee", icon: Database, decimals: 1 },
+            { label: "Audit Speed", num: 0, prefix: "", suffix: "", desc: "Instant digital HUID mapping", icon: ShieldCheck },
           ].map((stat, i) => (
             <motion.div 
               key={i}
