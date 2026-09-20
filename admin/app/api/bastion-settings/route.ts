@@ -1,12 +1,10 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabase } from '@/lib/supabase';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const VALID_FEATURES = [
     'db_watchdog_enabled',
@@ -22,6 +20,7 @@ const VALID_FEATURES = [
 // ── GET ── Fetch current settings ──────────────────────────────
 export async function GET() {
     try {
+        const supabase = getSupabase();
         if (!supabaseUrl || !supabaseKey) {
             return NextResponse.json(
                 { status: 'error', message: 'Supabase config missing' },
@@ -70,6 +69,7 @@ export async function GET() {
 // ── POST ── Toggle a feature ───────────────────────────────────
 export async function POST(req: NextRequest) {
     try {
+        const supabase = getSupabase();
         if (!supabaseUrl || !supabaseKey) {
             return NextResponse.json(
                 { status: 'error', message: 'Supabase config missing' },

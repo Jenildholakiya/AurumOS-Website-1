@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getSupabase } from '@/lib/supabase'
 
 const BUCKET = 'client-docs'
 const MAX_SIZE = 5 * 1024 * 1024 // 5MB
@@ -17,6 +12,7 @@ const ALLOWED_TYPES = [
 ]
 
 async function ensureBucket() {
+  const supabase = getSupabase()
   const { data: buckets } = await supabase.storage.listBuckets()
   const exists = buckets?.some(b => b.name === BUCKET)
   if (!exists) {
@@ -34,6 +30,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const supabase = getSupabase()
     const formData = await req.formData()
     const file = formData.get('file') as File | null
     const docType = formData.get('docType') as string // 'identity' | 'address'

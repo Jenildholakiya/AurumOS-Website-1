@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getSupabase } from '@/lib/supabase'
 import { broadcast } from '@/lib/sse'
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 /**
  * POST /api/subscription/expire
@@ -29,6 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const supabase = getSupabase()
     // Find the license
     let queryBuilder = supabase
       .from('licenses')

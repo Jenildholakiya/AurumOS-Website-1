@@ -2,15 +2,10 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabase } from '@/lib/supabase';
 
 // Verify admin secret is configured
 const MASTER_KEY = process.env.AURUM_MASTER_KEY || '';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 function deriveShopSecret(clientId: string): string {
   return crypto.createHmac('sha256', MASTER_KEY).update(clientId).digest('hex').slice(0, 32);
@@ -18,6 +13,7 @@ function deriveShopSecret(clientId: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    const supabase = getSupabase();
     const body = await req.json();
     console.log("[DEBUG] Received Payload:", JSON.stringify(body));
 
@@ -80,6 +76,7 @@ export async function GET(req: NextRequest) {
   const clientId = req.nextUrl.searchParams.get('client_id');
 
   try {
+    const supabase = getSupabase();
     if (!clientId) {
       // Retrieve both for the dropdown
       const { data, error } = await supabase.from('bastion_data').select('client_id, business_name');
