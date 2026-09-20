@@ -16,7 +16,13 @@ export default function Hero() {
       const scope = scopeRef.current;
       if (!scope) return;
 
-      const title = scope.querySelector('[data-hero-title]') as HTMLElement;
+      const title = scope.querySelector('[data-hero-title]') as HTMLElement | null;
+      const eyebrow = scope.querySelector('[data-hero-eyebrow]') as HTMLElement | null;
+      const sub = scope.querySelector('[data-hero-sub]') as HTMLElement | null;
+      const cta = scope.querySelector('[data-hero-cta]') as HTMLElement | null;
+      const image = scope.querySelector('[data-hero-image]') as HTMLElement | null;
+      const glows = scope.querySelectorAll('[data-hero-glow]');
+
       if (!title) return;
 
       const split = new SplitText(title, {
@@ -27,37 +33,51 @@ export default function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      tl.from(split.words, {
-        yPercent: 120,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.06,
-      })
-        .from(
-          '[data-hero-eyebrow]',
+      // Guard each target so GSAP never receives an empty selector / empty array
+      // (which logs "GSAP target not found").
+      if (split.words?.length) {
+        tl.from(split.words, {
+          yPercent: 120,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.06,
+        });
+      }
+      if (eyebrow) {
+        tl.from(
+          eyebrow,
           { y: 20, autoAlpha: 0, duration: 0.7 },
           0.15,
-        )
-        .from(
-          '[data-hero-sub]',
+        );
+      }
+      if (sub) {
+        tl.from(
+          sub,
           { y: 30, autoAlpha: 0, duration: 0.8 },
           '-=0.5',
-        )
-        .from(
-          '[data-hero-cta]',
+        );
+      }
+      if (cta) {
+        tl.from(
+          cta,
           { y: 20, autoAlpha: 0, duration: 0.6 },
           '-=0.4',
-        )
-        .from(
-          '[data-hero-image]',
+        );
+      }
+      if (image) {
+        tl.from(
+          image,
           { y: 60, autoAlpha: 0, scale: 0.95, duration: 1.2, ease: 'power2.out' },
           '-=0.9',
-        )
-        .from(
-          '[data-hero-glow]',
+        );
+      }
+      if (glows.length) {
+        tl.from(
+          glows,
           { scale: 0, autoAlpha: 0, duration: 1.5, ease: 'power2.out' },
           '-=1.2',
         );
+      }
 
       return () => split.revert();
     },
@@ -69,6 +89,9 @@ export default function Hero() {
       id="hero"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-32 pt-24"
     >
+      {/* Scope wraps ALL animated targets (glows + copy + image) so
+          useGSAP selector scoping + querySelectorAll can see them. */}
+      <div ref={scopeRef} className="contents">
       {/* Background Glow */}
       <div className="absolute -z-10 top-0 h-full w-full bg-[radial-gradient(circle_at_50%_0%,_var(--tw-gradient-stops))] from-rose-100/30 via-background to-background" />
 
@@ -86,7 +109,7 @@ export default function Hero() {
         />
       </Parallax>
 
-      <div ref={scopeRef} className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
+      <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
         {/* Text Content */}
         <div className="space-y-8">
           <span
@@ -114,7 +137,7 @@ export default function Hero() {
           </p>
 
           <div data-hero-cta className="flex gap-4 pt-4">
-            <Link href="/get-started">
+            <Link href="/signup">
               <MagneticButton className="inline-flex items-center justify-center h-12 rounded-full bg-primary px-8 text-base font-bold text-primary-foreground shadow-xl shadow-primary/20 btn-shimmer btn-glow cursor-pointer">
                 Request Demo <span className="btn-arrow">→</span>
               </MagneticButton>
@@ -166,6 +189,7 @@ export default function Hero() {
           </div>
         </div>
       </Reveal>
+      </div>
     </ScrollStage>
   );
 }

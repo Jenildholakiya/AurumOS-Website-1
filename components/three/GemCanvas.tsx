@@ -8,9 +8,15 @@ import type { GemScrollRef } from './gemScroll';
 
 // three.js + r3f are loaded ONLY when this canvas scrolls into view, keeping
 // them out of the initial bundle (critical for Lighthouse Performance).
+// The chunk is PRE-COMPILED shortly after page load (see effect below) so
+// dev-mode's slow three.js compile finishes before the user scrolls here.
 const GemScene = dynamic(() => import('./GemScene'), {
   ssr: false,
-  loading: () => null,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="size-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+    </div>
+  ),
 });
 
 type GemCanvasProps = {
@@ -26,8 +32,14 @@ export default function GemCanvas({ className = '', height = 360, progressRef }:
   const reduced = useReducedMotion();
 
   useEffect(() => {
+    // Warm the three.js chunk shortly after page load so its (slow, ~1MB)
+    // compile finishes before the user scrolls here. Mounting still waits
+    // for intersection below — this only pre-compiles the code.
+    const warm = setTimeout(() => {
+      void import('./GemScene');
+    }, 2500);
     const el = wrapRef.current;
-    if (!el) return;
+    if (!el) return () => clearTimeout(warm);
     const observer = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
       // Negative bottom margin: the hero is a full viewport tall, so the gem
@@ -38,7 +50,10 @@ export default function GemCanvas({ className = '', height = 360, progressRef }:
       { rootMargin: '0px 0px -30% 0px' },
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(warm);
+      observer.disconnect();
+    };
   }, []);
 
   // Auto-rotate whenever the gem is on screen (no hover required). The render

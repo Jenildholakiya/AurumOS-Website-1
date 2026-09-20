@@ -26,6 +26,7 @@ export default function PricingPage() {
   const plans = [
     {
       name: "Lite",
+      slug: "lite",
       price: "15,000",
       annual: "3,000",
       desc: "For single-shop jewelers who need solid local billing, stock, and security.",
@@ -51,6 +52,7 @@ export default function PricingPage() {
     },
     {
       name: "Pro",
+      slug: "pro",
       price: "35,000",
       annual: "7,000",
       desc: "For multi-PC shops needing full accounts, analytics, and advanced security.",
@@ -78,6 +80,7 @@ export default function PricingPage() {
     },
     {
       name: "Enterprise",
+      slug: "enterprise",
       price: "75,000",
       annual: "15,000",
       desc: "For multi-location chains needing cloud sync, fleet intelligence, and priority SLA.",
@@ -94,7 +97,7 @@ export default function PricingPage() {
         "API / integration access"
       ],
       notIncluded: [],
-      cta: "Talk to Sales",
+      cta: "Go Enterprise",
       highlight: false
     }
   ];
@@ -178,7 +181,7 @@ export default function PricingPage() {
             </div>
 
             <Button asChild className={`w-full mt-12 rounded-2xl py-7 font-bold text-lg group ${plan.highlight ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-transparent border border-primary text-primary hover:bg-primary hover:text-primary-foreground'}`}>
-              <Link href={`/#contact?plan=${encodeURIComponent(plan.name)}`}>
+              <Link href={`/checkout/${plan.slug}`}>
                 {plan.cta} <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>

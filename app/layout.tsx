@@ -3,8 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Chrome from "@/components/layout/Chrome";
 import AuroraBackground from "@/components/anim/AuroraBackground";
 import ScrollProgress from "@/components/anim/ScrollProgress";
 
@@ -94,9 +93,7 @@ export default function RootLayout({
         <AuroraBackground />
         <ScrollProgress />
         <MotionProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <Chrome>{children}</Chrome>
         </MotionProvider>
       </body>
     </html>

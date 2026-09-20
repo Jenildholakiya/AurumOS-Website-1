@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent, type Variants } from 'framer-motion';
+import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -46,21 +46,13 @@ export default function Navbar() {
     { name: 'Security', href: '/security' },
   ];
 
-  // Staggered reveal for the drawer's nav links on open.
-  const drawerContainer: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
-  };
-  const drawerItem: Variants = {
-    hidden: { opacity: 0, x: 28 },
-    show: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 350, damping: 30 } },
-  };
-
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+      <style>{`@keyframes aurum-nav-in { from { transform: translateY(-100px); } to { transform: translateY(0); } }
+@keyframes aurum-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aurum-drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
+      <header
+        style={{ animation: 'aurum-nav-in 0.5s ease-out both' }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
         isScrolled ? "bg-white/70 backdrop-blur-xl border-b border-rose-100/50 py-3" : "bg-transparent py-6"
       }`}
@@ -78,7 +70,7 @@ export default function Navbar() {
             const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
             return (
               <Link href={link.href} key={link.name}>
-                <motion.div className="relative cursor-pointer group">
+                <div className="relative cursor-pointer group">
                   <MagneticText
                     as="span"
                     hoverColor="oklch(0.50 0.14 25)"
@@ -89,12 +81,12 @@ export default function Navbar() {
                   >
                     {link.name}
                   </MagneticText>
-                  <motion.div
+                  <div
                     className={`absolute -bottom-1 left-0 h-[2px] w-full origin-left bg-primary transition-transform duration-300 ${
                       isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                     }`}
                   />
-                </motion.div>
+                </div>
               </Link>
             );
           })}
@@ -113,7 +105,7 @@ export default function Navbar() {
             </MagneticText>
           </Link>
 
-          <Link href="/get-started" className="hidden lg:flex">
+          <Link href="/signup" className="hidden lg:flex">
             <MagneticButton className="inline-flex items-center justify-center rounded-full px-6 py-2 bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 btn-shimmer cursor-pointer">
               Get Started
             </MagneticButton>
@@ -131,30 +123,24 @@ export default function Navbar() {
           </button>
         </div>
       </nav>
-    </motion.header>
+    </header>
 
-    {/* Mobile side drawer — slides in from the right with a staggered reveal.
-        Rendered as a sibling of <nav> (not a child) so the nav's framer-motion
-        transform can't create a containing block that breaks position:fixed. */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
+    {/* Mobile side drawer — slides in from the right.
+        Rendered as a sibling of <nav> (not a child) so the nav's
+        transform can't create a containing block that breaks position:fixed.
+        Pure CSS animations (no JS animation lib) so it can never get stuck. */}
+      {mobileOpen && (
+          <div
             key="mobile-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
             onClick={() => setMobileOpen(false)}
+            style={{ animation: 'aurum-fade-in 0.25s ease-out both' }}
             className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm lg:hidden"
           />
         )}
         {mobileOpen && (
-          <motion.aside
+          <aside
             key="mobile-drawer"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ duration: 0.38, ease: [0.32, 0.72, 0, 1] }}
+            style={{ animation: 'aurum-drawer-in 0.38s cubic-bezier(0.32,0.72,0,1) both' }}
             className="fixed top-0 right-0 z-[60] flex h-full w-[84%] max-w-sm flex-col bg-white/95 backdrop-blur-xl border-l border-rose-100/60 shadow-2xl lg:hidden"
           >
             {/* Header: brand + close */}
@@ -176,17 +162,14 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Nav links — staggered in on open */}
-            <motion.nav
-              variants={drawerContainer}
-              initial="hidden"
-              animate="show"
+            {/* Nav links */}
+            <nav
               className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5"
             >
               {navLinks.map((link) => {
                 const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
                 return (
-                  <motion.div key={link.name} variants={drawerItem}>
+                  <div key={link.name}>
                     <Link
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
@@ -206,10 +189,10 @@ export default function Navbar() {
                       </MagneticText>
                       <ArrowRight className="size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                     </Link>
-                  </motion.div>
+                  </div>
                 );
               })}
-            </motion.nav>
+            </nav>
 
             {/* Footer actions */}
             <div className="flex flex-col gap-3 border-t border-rose-100/50 px-6 py-5">
@@ -223,7 +206,7 @@ export default function Navbar() {
                   Login
                 </MagneticText>
               </Link>
-              <Link href="/get-started" onClick={() => setMobileOpen(false)}>
+              <Link href="/signup" onClick={() => setMobileOpen(false)}>
                 <MagneticButton className="inline-flex items-center justify-center w-full rounded-full bg-primary px-6 py-3 text-base font-bold text-primary-foreground shadow-lg shadow-primary/20 btn-shimmer cursor-pointer">
                   Get Started
                 </MagneticButton>
@@ -232,9 +215,8 @@ export default function Navbar() {
                 Enterprise jewellery ERP
               </p>
             </div>
-          </motion.aside>
+          </aside>
         )}
-      </AnimatePresence>
     </>
   );
 }

@@ -17,6 +17,12 @@
 /.next/
 /out/
 
+# admin sub-app (separate Next.js app in ./admin with its own deps)
+admin/node_modules
+admin/.next/
+admin/out/
+admin/build
+
 # production
 /build
 
@@ -39,3 +45,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local auto-license store (orders + minted keys, dev only)
+data/*.json
+!data/.gitkeep

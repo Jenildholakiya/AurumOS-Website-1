@@ -5,6 +5,7 @@ import ScrollStage from '@/components/anim/ScrollStage';
 import { gsap, useGSAP } from '@/components/anim/gsap/register';
 import SplitHeading from '@/components/anim/SplitHeading';
 import Reveal from '@/components/anim/Reveal';
+import { apiJson } from '@/lib/api-client';
 
 export default function DemoSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -44,12 +45,11 @@ export default function DemoSection() {
     setStatus('sending');
     setErrorMsg('');
     try {
-      const res = await fetch('/api/contact', {
+      const { res, data } = await apiJson('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, plan }),
       });
-      const data = await res.json();
       if (res.ok && data.ok) {
         setStatus('success');
         setForm({ firstName: '', lastName: '', email: '', phone: '', message: '' });

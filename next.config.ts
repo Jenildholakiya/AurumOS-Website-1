@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
     ],
   },
   images: {
+    // Local dev runs behind the admin's localhost:3000 subdomain proxy,
+    // which cannot forward /_next/image (Next intercepts it before
+    // middleware). Serve plain files in dev; keep optimization in prod.
+    unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
       {
         protocol: 'https',

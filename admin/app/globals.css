@@ -1,0 +1,111 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream:    #faf8f3;
+  --cream2:   #f2efe7;
+  --cream3:   #e8e3d8;
+  --ink:      #0e0c09;
+  --ink2:     #2a2620;
+  --ink3:     #5c5a52;
+  --gold:     #a87d1e;
+  --gold2:    #c9a227;
+  --gold3:    #8a6c0a;
+  --gold-bg:  rgba(168,125,30,0.07);
+  --gold-ln:  rgba(168,125,30,0.2);
+  --rule:     rgba(14,12,9,0.09);
+  --muted:    #7a7268;
+  --muted2:   #9e9890;
+  --red:      #b91c1c;
+  --green:    #15803d;
+  --blue:     #3b82f6;
+}
+
+.dark {
+  --cream:    #1a1814;
+  --cream2:   #222019;
+  --cream3:   #2d2a22;
+  --ink:      #f5f3ee;
+  --ink2:     #e0ddd5;
+  --ink3:     #a09a8e;
+  --gold:     #c9a227;
+  --gold2:    #d4b53a;
+  --gold3:    #e0c64e;
+  --gold-bg:  rgba(201,162,39,0.10);
+  --gold-ln:  rgba(201,162,39,0.25);
+  --rule:     rgba(245,243,238,0.08);
+  --muted:    #8a8478;
+  --muted2:   #6a6458;
+  --red:      #f87171;
+  --green:    #4ade80;
+  --blue:     #60a5fa;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dark body { color-scheme: dark; }
+
+  ::-webkit-scrollbar       { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--cream3); border-radius: 99px; }
+
+  input, select, textarea {
+    background: var(--cream2);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--muted2);
+  }
+}
+
+@layer components {
+  .font-serif { font-family: var(--font-serif), Georgia, serif; }
+  .font-mono  { font-family: var(--font-mono), monospace; }
+
+  .gold-shimmer {
+    background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+    background-size: 200%;
+    animation: goldShimmer 2.5s ease-in-out infinite;
+  }
+
+  .fade-up { animation: fadeUp 0.35s ease both; }
+
+  .badge-active  { @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-semibold; background: rgba(21,128,61,0.08); color: var(--green); border: 1px solid rgba(21,128,61,0.15); }
+  .badge-revoked { @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-semibold; background: rgba(185,28,28,0.08); color: var(--red); border: 1px solid rgba(185,28,28,0.15); }
+  .badge-pending { @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-semibold; background: rgba(201,162,39,0.08); color: var(--gold); border: 1px solid rgba(201,162,39,0.15); }
+}
+
+@keyframes goldShimmer {
+  0%   { background-position: 0%; }
+  100% { background-position: 200%; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   DARK MODE — only override things that can't
+   use CSS variables directly (Tailwind utils
+   like bg-white, text-zinc-*, etc.)
+   ============================================= */
+
+.dark .bg-white        { background-color: var(--cream2) !important; }
+.dark .bg-cream2       { background-color: var(--cream2) !important; }
+.dark .bg-cream3       { background-color: var(--cream3) !important; }
+
+.dark .text-black      { color: var(--ink) !important; }
+.dark .text-white      { color: var(--cream) !important; }
+
+.dark .border-cream3   { border-color: var(--cream3) !important; }
